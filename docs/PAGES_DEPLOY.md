@@ -2,7 +2,7 @@
 
 正式站点：https://lucidscore.org
 
-2026-11-16 最新部署版本：https://ab842d04.lucidscore.pages.dev
+2026-11-16 最新部署版本：https://b57daf4c.lucidscore.pages.dev
 
 
 作品规范地址：https://lucidscore.org/mahler/symphonie-2
