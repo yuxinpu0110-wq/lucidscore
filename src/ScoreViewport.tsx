@@ -15,21 +15,37 @@ function prepare(url:string){
  }
  return promise;
 }
-function useGeometry(view:Box){
- const target=[...view],signature=target.join(','),current=useRef(target),[values,Values]=useState(target);
+function useGeometry(view:Box,svg:React.RefObject<SVGSVGElement|null>){
+ const target=[...view],signature=target.join(','),current=useRef(target);
  useLayoutEffect(()=>{
   const next=signature.split(',').map(Number),start=[...current.current],motion=matchMedia('(prefers-reduced-motion: reduce)');let frame=0;
-  const snap=()=>{cancelAnimationFrame(frame);current.current=next;Values(next)};
+  const draw=(v:number[])=>{const el=svg.current;if(!el)return;el.setAttribute('viewBox',v.join(' '));el.style.aspectRatio=`${v[2]}/${v[3]}`;el.dataset.cameraMoving=String(v.some((n,i)=>Math.abs(n-next[i])>.001));el.dispatchEvent(new Event('score-camera'))};
+  const snap=()=>{cancelAnimationFrame(frame);current.current=next;draw(next)};
   const changed=()=>{if(motion.matches)snap()};
   if(motion.matches||start.every((n,i)=>n===next[i]))snap();
-  else {const began=performance.now();const tick=(now:number)=>{const p=Math.min(1,(now-began)/480),ease=1-(1-p)**3;current.current=start.map((n,i)=>n+(next[i]-n)*ease);Values(current.current);if(p<1)frame=requestAnimationFrame(tick)};frame=requestAnimationFrame(tick)}
+  else {const began=performance.now();const tick=(now:number)=>{const p=Math.min(1,(now-began)/300),ease=1-(1-p)**3;current.current=start.map((n,i)=>n+(next[i]-n)*ease);draw(current.current);if(p<1)frame=requestAnimationFrame(tick)};frame=requestAnimationFrame(tick)}
   motion.addEventListener('change',changed);return()=>{cancelAnimationFrame(frame);motion.removeEventListener('change',changed)};
  },[signature]);
- return values;
+ return current.current;
 }
 function Pane({page,outgoing}:{page:ScorePage;outgoing?:boolean}){
- const v=useGeometry(page.view),inkFilter=useId(),svg=useRef<SVGSVGElement>(null);
- return <div className="score-follow-page"><svg ref={svg} className="score-ink score-transition-ink" viewBox={v.join(' ')} data-camera-moving={v.some((n,i)=>Math.abs(n-page.view[i])>.001)} style={{aspectRatio:`${v[2]}/${v[3]}`}} role={outgoing?undefined:'img'} aria-label={outgoing?undefined:page.label} preserveAspectRatio="xMidYMid meet">
+ const [mobile,Mobile]=useState(()=>matchMedia('(max-width:768px)').matches);
+ useEffect(()=>{const query=matchMedia('(max-width:768px)'),change=()=>Mobile(query.matches);query.addEventListener('change',change);return()=>query.removeEventListener('change',change)},[]);
+ const view:Box=mobile&&page.box?[page.view[0],Math.max(0,page.box[1]-16),page.view[2],Math.min(1232,page.box[1]+page.box[3]+16)-Math.max(0,page.box[1]-16)]:page.view;
+ const svg=useRef<SVGSVGElement>(null),v=useGeometry(view,svg),inkFilter=useId();
+ const lastTouch=useRef(Number.NEGATIVE_INFINITY);
+ useEffect(()=>{
+  const source=svg.current,viewport=source?.closest('.score-follow-pages') as HTMLElement|null;
+  if(!mobile||!source||!viewport||!page.box||outgoing)return;
+  const touch=()=>{lastTouch.current=performance.now()};
+  const follow=()=>{if(performance.now()-lastTouch.current<1200)return;const matrix=source.getScreenCTM();if(!matrix)return;
+   const [x,y,w,h]=page.box!,center=new DOMPoint(x+w/2,y+h/2).matrixTransform(matrix),rect=viewport.getBoundingClientRect();
+   viewport.scrollTo({left:Math.max(0,viewport.scrollLeft+center.x-rect.left-viewport.clientWidth/2),top:Math.max(0,viewport.scrollTop+center.y-rect.top-viewport.clientHeight/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+  };
+  const timer=setTimeout(follow,350),observer=new ResizeObserver(follow);observer.observe(viewport);viewport.addEventListener('pointerdown',touch,{passive:true});
+  return()=>{clearTimeout(timer);observer.disconnect();viewport.removeEventListener('pointerdown',touch)};
+ },[mobile,page.box?.join(','),page.url,outgoing]);
+ return <div className="score-follow-page" data-highlighted={!!page.box}><svg ref={svg} className="score-ink score-transition-ink" viewBox={v.join(' ')} data-camera-moving={v.some((n,i)=>Math.abs(n-view[i])>.001)} style={{aspectRatio:`${v[2]}/${v[3]}`}} role={outgoing?undefined:'img'} aria-label={outgoing?undefined:page.label} preserveAspectRatio="xMidYMin meet">
   <defs><filter id={inkFilter} colorInterpolationFilters="sRGB">
    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.333333 -.333333 -.333334 0 1" result="scan-ink"/>
    <feComponentTransfer in="scan-ink" result="clean-ink"><feFuncA type="linear" slope="1.12" intercept="-.04"/></feComponentTransfer>

@@ -1,5 +1,8 @@
 {
   "version": 1,
+  "audioCorrections": [
+    {"movement":5,"bar":712,"trackId":"movement-5-continuous","fingerprint":"sha256:0d227c7ac41f3af52618677d13955468ad24c70ec9d2466c7bd4b63e425f9476","estimatedStart":2147.666667,"start":2147,"basis":"User listening correction on 2026-11-12: bar 712 begins at movement-local 35:47. Adjust this boundary only; other onsets remain estimated and need review."}
+  ],
   "method": "Read the small system-start bar labels in stable frames of the registered score video, comparing the matched PDF page. Rehearsal figures are excluded. View boundaries are visibility anchors, not heard bar onsets. Intermediate bar times are local estimates. Last numbered bars are visible in the final video frames (I 445, II 299, V 764); IV ends at 68 by counting the last system from its printed 58. No conversion of manuscript-only numbers is inferred.",
   "movements": [
     {"movement":1,"barCount":445,"firstBars":[1,6,16,21,26,31,45,52,59,67,73,87,101,123,141,149,159,164,169,179,191,203,210,216,221,235,254,262,266,272,284,289,300,313,325,331,337,343,355,369,378,384,392,397,410,420,437],"notes":["The view starting at 21 seconds shows bar 6; the next retained view starts at bar 16. Bars 11–15 are estimated inside this local window, without a claimed individual score box.","The author manuscript declares 454 bars. Bars 446–454 have no location in this edition; g26 remains readable without a fabricated audio target."]},

@@ -8,6 +8,6 @@ export function ListeningAtmosphere({movement,phase,visualEvent}:{movement:numbe
 export function PoeticClue({text,id,onExplore}:{text:string;id:string;onExplore:()=>void}){
  return <button className="focus-clue-button" onClick={onExplore} aria-label={text}>
   <span className="focus-clue-text" key={id}>{text}</span>
-  <span className="focus-clue-subhint" aria-hidden="true">暂停，走近这段音乐 <span>↗</span></span>
+  <span className="focus-clue-subhint" aria-hidden="true">暂停 · 查看解析 <span>↗</span></span>
  </button>;
 }

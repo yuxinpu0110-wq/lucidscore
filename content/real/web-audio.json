@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "tracks": [
+    {
+      "trackId": "movement-1-continuous",
+      "sourceFingerprint": "sha256:2fe2cfc8a02e6e502da8aaa3b199d54c07d370becf4f207fd74c33e51f06c99e",
+      "fingerprint": "sha256:43c5a8501b3f490b3a94aca86472caafe04bfe5fe7a6f414b91e2057c19f6a8b",
+      "url": "/audio/movement-1-web.m4a",
+      "duration": 1494.0232199546485,
+      "bytes": 47776920,
+      "sourceBytes": 97978685,
+      "codec": "aac",
+      "bitrate": 256000,
+      "hls": {
+        "url": "/audio/hls/movement-1/index.m3u8",
+        "duration": 1494.0231500000075,
+        "fingerprint": "sha256:86338303a48d0b1bb402f065065e385af3a5dd15b0c472956235853ec1e42f3f"
+      }
+    },
+    {
+      "trackId": "movement-2-continuous",
+      "sourceFingerprint": "sha256:d4f1f8a7d93754929044afaca4a05434740bdce32e5124eafc976d0603ec1acd",
+      "fingerprint": "sha256:21264594f657f94a9f491f4de2ba586bb6b4a25bb4087a5a3bfc240b7ad72ed3",
+      "url": "/audio/movement-2-web.m4a",
+      "duration": 726.0232199546485,
+      "bytes": 23025963,
+      "sourceBytes": 41718781,
+      "codec": "aac",
+      "bitrate": 256000,
+      "hls": {
+        "url": "/audio/hls/movement-2/index.m3u8",
+        "duration": 726.0231859999999,
+        "fingerprint": "sha256:e26886291b8f7890aa54c0103a0b4d172133cd9d2d581bab1077ce8d64d67cd6"
+      }
+    },
+    {
+      "trackId": "movement-3-continuous",
+      "sourceFingerprint": "sha256:2614c887b4b49c26a7b99a47b1e6a39edd292cb5e47d5aaa3cb178cb3dc91c0f",
+      "fingerprint": "sha256:209bcb9f527a19511b4458476d6dbc32d479b7fb64b4a6262338ba42553b3108",
+      "url": "/audio/movement-3-web.m4a",
+      "duration": 684.8498866213151,
+      "bytes": 21948142,
+      "sourceBytes": 45955774,
+      "codec": "aac",
+      "bitrate": 256000,
+      "hls": {
+        "url": "/audio/hls/movement-3/index.m3u8",
+        "duration": 684.8493099999998,
+        "fingerprint": "sha256:4d303636cbd128951aae658aa7f43334c95fa2850cecdae89c522bf1726a2c37"
+      }
+    },
+    {
+      "trackId": "movement-4-continuous",
+      "sourceFingerprint": "sha256:986b216a0533e5bae3e527865a0e8628ef0f083824f1eb6bee8093da6429f4af",
+      "fingerprint": "sha256:f2cf88653f57746df233e0ba95227527a0e06333cf48a010b0a97b7c30e0ca05",
+      "url": "/audio/movement-4-web.m4a",
+      "duration": 378.5298866213152,
+      "bytes": 11907766,
+      "sourceBytes": 19473723,
+      "codec": "aac",
+      "bitrate": 256000,
+      "hls": {
+        "url": "/audio/hls/movement-4/index.m3u8",
+        "duration": 378.52986899999974,
+        "fingerprint": "sha256:908be13c81cad0fe5ab01a6350b99eef4e53b123098b35cb43b294c28ef15182"
+      }
+    },
+    {
+      "trackId": "movement-5-continuous",
+      "sourceFingerprint": "sha256:0d227c7ac41f3af52618677d13955468ad24c70ec9d2466c7bd4b63e425f9476",
+      "fingerprint": "sha256:536396b9b853a62d611f206e47bd237c993db8c371b09c15209b8e28ad1851da",
+      "url": "/audio/movement-5-web.m4a",
+      "duration": 2318.689886621315,
+      "bytes": 73507230,
+      "sourceBytes": 159062990,
+      "codec": "aac",
+      "bitrate": 256000,
+      "hls": {
+        "url": "/audio/hls/movement-5/index.m3u8",
+        "duration": 2318.6897780000245,
+        "fingerprint": "sha256:c5750930c4898a2603d7811ca1e8ac04934fae10a2b7d8cb43b63861faa7f2c5"
+      }
+    }
+  ]
+}

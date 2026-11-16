@@ -13186,7 +13186,8 @@
         "At reference 4359 seconds the small label is 455; 30 is the rehearsal figure.",
         "Reference 4454 seconds labels the choral entry 472; 31 is the rehearsal figure.",
         "Reference 4674.5 seconds labels the upper system 512; the lower system at 4719 seconds starts at 525.",
-        "The last two pages show 740, 752 and final 764. The author manuscript stops at 762 and is retained verbatim."
+        "The last two pages show 740, 752 and final 764. The author manuscript stops at 762 and is retained verbatim.",
+        "User listening correction on 2026-11-12: bar 712 begins at movement-local 35:47. Adjust this boundary only; other onsets remain estimated and need review."
       ],
       "measures": [
         {
@@ -23571,12 +23572,12 @@
             {
               "measureId": "ue-5-m711",
               "start": 2143.266667,
-              "end": 2147.666667,
+              "end": 2147,
               "status": "needs_review"
             },
             {
               "measureId": "ue-5-m712",
-              "start": 2147.666667,
+              "start": 2147,
               "end": 2152.066667,
               "status": "needs_review"
             },

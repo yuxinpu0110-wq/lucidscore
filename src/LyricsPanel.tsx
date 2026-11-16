@@ -1,8 +1,9 @@
 import {useState} from 'react';
 import type {Lyric} from './lyricsModel';
 
-export function LyricsPanel({lyric}:{lyric:Lyric|null}){
- const [language,Language]=useState('de-zh');
+export function LyricsPanel({lyric,language:controlledLanguage,onLanguage}:{lyric:Lyric|null;language?:string;onLanguage?:(language:string)=>void}){
+ const [localLanguage,LocalLanguage]=useState('de-zh');
+ const language=controlledLanguage??localLanguage,Language=onLanguage??LocalLanguage;
  if(!lyric)return null;
  return <section className="lyrics-panel" aria-label="当前唱词" data-lyric={lyric.id}>
   <select className="lyrics-language" aria-label="唱词语言" value={language} onChange={e=>Language(e.target.value)}><option value="de">德</option><option value="de-zh">德中</option><option value="de-en">德英</option></select>

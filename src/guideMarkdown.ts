@@ -19,7 +19,7 @@ export function parseGuideMarkdown(text:string):GuideData{
  if(lines[i++]!=='---')fail('文档须以 --- 元信息开始');
  const meta:Record<string,string>={};
  while(i<lines.length&&lines[i]!=='---'){const m=/^(format|edition|movement):\s*(.+)$/.exec(lines[i]);if(!m||meta[m[1]])fail('元信息字段无效或重复');meta[m[1]]=m[2].trim();i++}
- if(lines[i++]!=='---'||meta.format!=='mahler-lexicon-guides/1'||! /^[1-5]$/.test(meta.movement)||!meta.edition)fail('需要 format: mahler-lexicon-guides/1、edition 和 movement: 1—5');
+ if(lines[i++]!=='---'||meta.format!=='lucidscore-guides/1'||! /^[1-5]$/.test(meta.movement)||!meta.edition)fail('需要 format: lucidscore-guides/1、edition 和 movement: 1—5');
  const guides:Guide[]=[];let current:Guide|null=null,section:Section|null=null;let fields=new Set<string>();
  function finish(){if(!current)return;for(const key of Object.keys(headings))if(!fields.has(key))fail(`${current.id} 缺少 ### ${key}`);for(const key of ['appreciation','structure','prompt'] as const)if(!current[key].trim())fail(`${current.id} 的 ${key} 不能为空`);for(const key of ['appreciation','structure','harmony','orchestration','prompt'] as const){const value=current[key]?.trim()||'';validateGuideLinks(value,+meta.movement);if(key==='harmony'||key==='orchestration')current[key]=value==='（暂缺）'?null:value||null;else current[key]=value}if(!current.researchId||!current.from||!current.to)fail(`${current.id} 缺少小节或依据字段`);guides.push(current)}
  for(;i<lines.length;i++){
@@ -36,7 +36,7 @@ export function parseGuideMarkdown(text:string):GuideData{
  return{version:1,edition:meta.edition,movement:+meta.movement,guides};
 }
 export function serializeGuideMarkdown(data:GuideData){
- const output=['---','format: mahler-lexicon-guides/1',`edition: ${data.edition}`,`movement: ${data.movement}`,'---','',`# 第${data.movement}乐章 · 聆听导读`,''];
+ const output=['---','format: lucidscore-guides/1',`edition: ${data.edition}`,`movement: ${data.movement}`,'---','',`# 第${data.movement}乐章 · 聆听导读`,''];
  for(const g of data.guides){output.push(`## ${g.id} | ${g.title}`,`小节: ${g.from}-${g.to}`,`依据: ${g.researchId}`,'');for(const [name,key]of Object.entries(headings) as [Section,typeof headings[Section]][])output.push(`### ${name}`,'',g[key]||'（暂缺）','')}
  return output.join('\n');
 }

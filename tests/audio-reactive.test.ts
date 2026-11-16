@@ -11,6 +11,8 @@ function environment(options:{unsupported?:boolean;resumeFails?:boolean}={}){
   async close(){this.state='closed'}
   createAnalyser(){return {fftSize:0,smoothingTimeConstant:0,frequencyBinCount:1024,connect:()=>destinationLinks++,getByteFrequencyData:(a:Uint8Array)=>a.fill(level)}}
   createMediaElementSource(){creates++;return {connect:()=>sourceLinks++,disconnect:()=>{}}}
+  currentTime=0;
+  createGain(){return {gain:{cancelAndHoldAtTime:()=>{},linearRampToValueAtTime:()=>{}},connect:()=>{}}}
  }
  vi.stubGlobal('window',options.unsupported?{}:{AudioContext:FakeContext});
  vi.stubGlobal('document',{documentElement:root,body,getElementById:()=>main,addEventListener:()=>{},removeEventListener:()=>{}});

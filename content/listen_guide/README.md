@@ -16,7 +16,7 @@
 
 ## 唱词
 
-直接读取 [第四章](script/m4.md) 与 [第五章](script/m5.md)，共7／16段。每段由 `**小节: 起点-终点**` 与 Deutsch／English／中文三行表格组成；`<br>` 仅表示换行，其余HTML拒绝。元信息格式为 `mahler-lexicon-lyrics/1`。修改译文无需重建时间；修改德文、范围或增删段落时须同步维护映射，否则校验会拒绝不匹配内容。
+直接读取 [第四章](script/m4.md) 与 [第五章](script/m5.md)，共7／16段。每段由 `**小节: 起点-终点**` 与 Deutsch／English／中文三行表格组成；`<br>` 仅表示换行，其余HTML拒绝。元信息格式为 `lucidscore-lyrics/1`。修改译文无需重建时间；修改德文、范围或增删段落时须同步维护映射，否则校验会拒绝不匹配内容。
 
 时间独立保存在 `content/real/lyrics-sync.json`，绑定连续音频指纹与谱本。`scripts/sync/lyric-anchors.json` 记录各唱词在PDF声乐谱表中的局部位置；`node scripts/sync/build_lyrics_maps.mjs` 经既有全曲音频对齐重建文件本地秒。它是局部谱段插值估计，未进行逐字强制对齐，也不等于已有完整四／五章小节索引。复调声部交接、停顿与变速仍须局部回听微调。
 

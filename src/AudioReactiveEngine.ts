@@ -4,6 +4,7 @@ export type VisualState={movement:number;playing:boolean;bar:number|null};
 /** A single unity-gain media graph. Visual analysis never controls playback. */
 export class AudioReactiveEngine {
  private ctx:AudioContext|null=null;
+ private gain:GainNode|null=null;
  private analyser:AnalyserNode|null=null;
  private sourceMap=new WeakMap<HTMLMediaElement,MediaElementAudioSourceNode>();
  private connecting:Promise<void>|null=null;
@@ -41,7 +42,7 @@ export class AudioReactiveEngine {
    if(this.disposed||ctx.state!=='running')return;
    if(!this.analyser){this.analyser=ctx.createAnalyser();this.analyser.fftSize=2048;this.analyser.smoothingTimeConstant=.85;this.data=new Uint8Array(this.analyser.frequencyBinCount);this.analyser.connect(ctx.destination)}
    source=this.sourceMap.get(audio);
-   if(!source){source=ctx.createMediaElementSource(audio);this.sourceMap.set(audio,source);source.connect(this.analyser)}
+   if(!source){source=ctx.createMediaElementSource(audio);this.sourceMap.set(audio,source);source.connect(this.gain||(this.gain=this.ctx!.createGain()));this.gain!.connect(this.analyser)}
    this.status='analysed';
   }catch{
    // If graph setup fails after capture, preserve a direct unity-gain route.
@@ -50,20 +51,25 @@ export class AudioReactiveEngine {
   }
   this.wake();
  }
- private write(name:string,value:number){const next=value.toFixed(4);if(this.written.get(name)!==next){document.documentElement.style.setProperty(name,next);this.written.set(name,next)}}
+ fadeTo(value:number,seconds:number){if(!this.gain||!this.ctx)return;const gain=this.gain.gain,now=this.ctx.currentTime;gain.cancelAndHoldAtTime(now);gain.linearRampToValueAtTime(value,now+seconds)}
+ private write(name:string,value:number){if(name.startsWith('--audio-')&&value!==0&&Math.abs(value-Number(this.written.get(name)??'-1'))<.005)return;const next=value.toFixed(4);if(this.written.get(name)!==next){document.documentElement.style.setProperty(name,next);this.written.set(name,next)}}
  private wake=()=>{if(!this.disposed&&!this.raf)this.raf=requestAnimationFrame(this.tick)};
  private tick=(now:number)=>{
   this.raf=0;if(this.disposed)return;
+  // Decorative analysis must not compete with score motion or native decoding.
+  if(document.visibilityState==='hidden'){this.lastTime=0;return}
+  if(!this.reduce.matches&&this.lastTime&&now-this.lastTime<1000/30){this.wake();return}
   const state=this.read(),reduced=this.reduce.matches,dt=this.lastTime?Math.min(.1,(now-this.lastTime)/1000):1/60;this.lastTime=now;this.elapsed+=dt;
   if(this.movement!==state.movement){this.movement=state.movement;this.dawn=0;this.ink=0}
   const targetDawn=state.movement===5&&state.bar!==null?computeMovement5DawnProgress(state.bar):0;
-  this.dawn=reduced?targetDawn:damp(this.dawn,targetDawn,dt,.9,.9);
+  const dawnAttack=state.movement===5&&state.bar!==null&&state.bar>=712?.28:.9;
+  this.dawn=reduced?targetDawn:damp(this.dawn,targetDawn,dt,dawnAttack,.9);
   if(Math.abs(this.dawn-targetDawn)<.0002)this.dawn=targetDawn;
   const inkTarget=this.dawn>=.65?1:0;this.ink=reduced?inkTarget:damp(this.ink,inkTarget,dt,.12,.12);
   if(Math.abs(this.ink-inkTarget)<.0002)this.ink=inkTarget;
   if(!state.playing||reduced)this.targets=[0,0,0];
   else if(this.status==='analysed'&&this.analyser&&this.data&&this.ctx){
-   if(now-this.lastFFT>=32){this.lastFFT=now;this.analyser.getByteFrequencyData(this.data);this.targets=[bandEnergy(this.data,this.ctx.sampleRate,2048,20,240)**1.3,bandEnergy(this.data,this.ctx.sampleRate,2048,240,2600),bandEnergy(this.data,this.ctx.sampleRate,2048,2600,10000)**1.2]}
+   if(now-this.lastFFT>=1000/30){this.lastFFT=now;this.analyser.getByteFrequencyData(this.data);this.targets=[bandEnergy(this.data,this.ctx.sampleRate,2048,20,240)**1.3,bandEnergy(this.data,this.ctx.sampleRate,2048,240,2600),bandEnergy(this.data,this.ctx.sampleRate,2048,2600,10000)**1.2]}
   }else if(this.status==='fallback'){
    // Explicit unsupported-analysis fallback only. Real digital silence stays still.
    this.targets=[.18+Math.sin(this.elapsed*.5)*.12,.22+Math.cos(this.elapsed*.35)*.1,.1+Math.sin(this.elapsed*.65)*.08];

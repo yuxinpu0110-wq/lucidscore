@@ -16,6 +16,13 @@ const original=validate(rawCatalog),catalog=continuousCatalog(original,validateC
 const scores=validateWorkSync(rawScores,catalog,'sha256:'+evidence.pdfSHA256);
 const library=validateWorkMeasures(raw,catalog,scores);
 describe('edition-bound local bar navigation for I, II, IV and V',()=>{
+ it('uses the user-corrected 35:47 onset for V/712 in playback and navigation',()=>{
+  const d=library[5],t=d.tracks[0];
+  expect(workMeasureAt(d,t.id,t.fingerprint,2146.999)?.measure.number).toBe(711);
+  expect(workMeasureAt(d,t.id,t.fingerprint,2147)?.measure.number).toBe(712);
+  expect(workBarRange(d,t.id,t.fingerprint,712)?.start).toBe(2147);
+  expect(t.intervals[710].end).toBe(t.intervals[711].start);
+ });
  it('keeps score numbering separate from author ranges and produces no invented bar rectangles',()=>{
   expect(Object.values(library).map(d=>d.barCount)).toEqual([445,299,68,764]);
   for(const d of Object.values(library)){

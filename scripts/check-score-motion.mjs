@@ -11,13 +11,13 @@ try{
  await page.goto('http://127.0.0.1:5200');
  const audio=page.locator('audio'),input=page.getByLabel('小节号',{exact:true}),frame=page.locator('.current-score .measure-liquid-lens');
  const expectedRect=(locator,b)=>locator.evaluate((el,box)=>{
-  const svg=el.parentElement.querySelector('svg'),m=svg.getScreenCTM(),p=el.parentElement.getBoundingClientRect();
-  const a=new DOMPoint(box[0]*911,box[1]*1232).matrixTransform(m),z=new DOMPoint((box[0]+box[2])*911,(box[1]+box[3])*1232).matrixTransform(m);
-  return {x:a.x-p.left-4,y:a.y-p.top-10,width:Math.max(16,z.x-a.x+8),height:z.y-a.y+20};
+  const pane=el.closest('.score-follow-page'),svg=pane.querySelector('svg'),m=svg.getScreenCTM(),p=pane.getBoundingClientRect();
+  const a=new DOMPoint(box[0]*911-4,box[1]*1232-10).matrixTransform(m),z=new DOMPoint((box[0]+box[2])*911+4,(box[1]+box[3])*1232+10).matrixTransform(m);
+  return {x:a.x-p.left,y:a.y-p.top,width:z.x-a.x,height:z.y-a.y};
  },b.box);
- const pose=locator=>locator.evaluate(el=>{const m=new DOMMatrix(getComputedStyle(el).transform);return{x:m.m41,y:m.m42,width:parseFloat(el.style.width),height:parseFloat(el.style.height)}});
+ const pose=locator=>locator.evaluate(el=>{const r=el.getBoundingClientRect(),p=el.closest('.score-follow-page').getBoundingClientRect();return{x:r.left-p.left,y:r.top-p.top,width:r.width,height:r.height}});
  const settledAt=async(locator,b)=>{
-  await expect(locator).toHaveAttribute('data-page',String(b.page));await expect(locator.locator('..').locator('svg')).toHaveAttribute('data-camera-moving','false');await expect(locator).toHaveAttribute('data-moving','false');
+  await expect(locator).toHaveAttribute('data-page',String(b.page));await expect.poll(()=>locator.evaluate(el=>el.closest('.score-follow-page').querySelector('svg').dataset.cameraMoving)).toBe('false');await expect(locator).toHaveAttribute('data-moving','false');
   await expect.poll(async()=>{const target=await expectedRect(locator,b),actual=await pose(locator);return Math.max(...Object.keys(target).map(k=>Math.abs(actual[k]-target[k])))}).toBeLessThan(.6);
  };
  const ready=()=>page.waitForFunction(()=>document.querySelector('audio').readyState>=1);
@@ -36,15 +36,27 @@ try{
  await page.locator('nav button').nth(0).click();await ready();await input.fill('1');
  const b1=boxes.find(e=>e.movement===1&&e.number===1),b2=boxes.find(e=>e.movement===1&&e.number===2);
  await settledAt(frame,b1);const start=await pose(frame),target=await expectedRect(frame,b2);
+ const restingFilter=await frame.evaluate(el=>getComputedStyle(el).backdropFilter);
  await input.fill('2');await page.waitForTimeout(50);
  const mid=await pose(frame),leftProgress=(mid.x-start.x)/(target.x-start.x),rightProgress=(mid.x+mid.width-start.x-start.width)/(target.x+target.width-start.x-start.width);
- expect(leftProgress).toBeGreaterThan(0);expect(rightProgress).toBeGreaterThan(leftProgress);
- expect(await frame.evaluate(el=>Number(el.style.getPropertyValue('--lens-velocity')))).toBeGreaterThan(0);
+ expect(leftProgress).toBeGreaterThan(0);expect(rightProgress).toBeCloseTo(leftProgress,2);
+ expect(await frame.evaluate(el=>getComputedStyle(el).backdropFilter)).toBe(restingFilter);
+ // Second/third systems have slightly different crop bounds on every bar.
+ // Camera projection must not snap or cancel the independent locator slide.
+ for(const [from,to]of [[10,11],[12,13],[13,14],[14,15],[16,17]]){
+  await input.fill(String(from));await settledAt(frame,boxes.find(e=>e.movement===1&&e.number===from));
+  const x=await frame.evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m41),next=boxes.find(e=>e.movement===1&&e.number===to),targetX=next.box[0]*911-4;
+  await input.fill(String(to));await page.waitForTimeout(50);
+  const intermediate=await frame.evaluate(el=>({x:new DOMMatrix(getComputedStyle(el).transform).m41,moving:el.dataset.moving}));
+  expect(intermediate.moving).toBe('true');expect((intermediate.x-x)/(targetX-x)).toBeGreaterThan(0);expect((intermediate.x-x)/(targetX-x)).toBeLessThan(1);
+  await settledAt(frame,next);
+ }
  await input.fill('3');await input.fill('1');await settledAt(frame,b1);
+ expect(await frame.evaluate(el=>getComputedStyle(el).backdropFilter)).toBe(restingFilter);
  // Row morph and live layout changes use the actual SVG screen transform.
  await page.locator('nav button').nth(1).click();await ready();await input.fill('7');await settledAt(frame,boxes.find(e=>e.movement===2&&e.number===7));
  await input.fill('8');await page.waitForTimeout(45);
- expect(await frame.evaluate(el=>new DOMMatrix(getComputedStyle(el).transform).m22)).toBeLessThan(1);
+ expect(await frame.evaluate(el=>el.dataset.moving==='true'||el.closest('.score-follow-page').querySelector('svg').dataset.cameraMoving==='true')).toBe(true);
  const row=boxes.find(e=>e.movement===2&&e.number===8);await settledAt(frame,row);
  await page.getByRole('button',{name:'放大谱面',exact:true}).click();await settledAt(frame,row);
  await page.getByRole('button',{name:'收起放大',exact:true}).click();await settledAt(frame,row);
@@ -101,5 +113,5 @@ try{
  await broken.goto('http://127.0.0.1:5200');await broken.locator('nav button').nth(3).click();
  await expect(broken.locator('.current-score')).toContainText('谱页加载失败');await expect(broken.getByRole('button',{name:'播放',exact:true})).toBeEnabled();await broken.close();
  expect(errors).toEqual([]);
- console.log('PASS all chapter lenses, asymmetric spring stretch, row morph, zoom/resize projection, sharp optics, cry tint, decoded page crossfade, stale-load cancellation, staged/damped palette, reduced motion/high contrast/forced colors, keyboard, narrow screens, single audio');
+ console.log('PASS all chapter lenses, compositor-only slide/scale without spring stretch, row transition, zoom/resize projection, sharp optics, cry tint, decoded page crossfade, stale-load cancellation, staged/damped palette, reduced motion/high contrast/forced colors, keyboard, narrow screens, single audio');
 }finally{await browser?.close();server.kill()}

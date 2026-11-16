@@ -6,7 +6,7 @@ const server=spawn('node',['node_modules/vite/bin/vite.js','preview','--host','1
 try{
  await new Promise(r=>setTimeout(r,1200));browser=await chromium.launch({channel:'msedge',headless:true});const page=await browser.newPage({viewport:{width:1280,height:1000}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('http://127.0.0.1:5197');const audio=page.locator('audio'),lyrics=page.getByRole('region',{name:'当前唱词',exact:true});
- await expect(page.locator('.intro .notice')).toContainText('102 段');await expect(lyrics).toHaveCount(0);await expect(audio).toHaveCount(1);
+ await expect(page.locator('.review-drawer .notice')).toContainText('102 段');await expect(lyrics).toHaveCount(0);await expect(audio).toHaveCount(1);
  async function seek(time){await audio.evaluate((a,t)=>{a.currentTime=t;a.dispatchEvent(new Event('timeupdate'))},time)}
  for(const track of data.tracks){
   await page.locator('nav button').nth(track.movement-1).click();await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);await expect(audio).toHaveJSProperty('paused',true);
@@ -17,7 +17,7 @@ try{
   }
   await seek(end+.1);await expect(lyrics).toHaveCount(0);
   const first=track.intervals[0];await seek(first.start+.5);
-  const lyricBox=await lyrics.boundingBox(),scoreBox=await page.locator('.score-page-follow').boundingBox();if(lyricBox.y+lyricBox.height>scoreBox.y+1)throw Error('lyrics not above score');
+  const lyricBox=await lyrics.boundingBox(),scoreBox=await page.locator('.score-page-follow .score-viewport').boundingBox();if(lyricBox.y+lyricBox.height>scoreBox.y+1)throw Error('lyrics not above score');
   const lang=lyrics.getByLabel('唱词语言');await expect(lang).toHaveValue(track.movement===4?'de-zh':'de-en');
   if(track.movement===4){await expect(lyrics.locator('[lang=zh-CN]')).toContainText('红玫瑰');await lang.selectOption('de');await expect(lyrics.locator('p')).toHaveCount(1);await expect(audio).toHaveJSProperty('paused',true);await lang.focus();await page.keyboard.press('ArrowDown');await page.keyboard.press('Enter');await expect(lang).toHaveValue('de-zh')}
   await lang.selectOption('de-en');await expect(lyrics.locator('[lang=en]')).toBeVisible();await expect(lyrics.locator('[lang=zh-CN]')).toHaveCount(0);expect(await audio.evaluate(a=>a.currentTime)).toBeCloseTo(first.start+.5,1);
@@ -30,7 +30,7 @@ try{
   await lang.selectOption('de-en');
  }
  for(const movement of [1,2,3]){await page.locator('nav button').nth(movement-1).click();await expect(lyrics).toHaveCount(0)}
- await page.locator('nav button').nth(3).click();await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);await expect(lyrics).toHaveCount(1);await page.locator('input[type=file]').first().setInputFiles('public/assets/demo.wav');await expect(lyrics).toHaveCount(0);
+ await page.locator('nav button').nth(3).click();await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);await expect(lyrics).toHaveCount(1);await page.getByRole('button',{name:'审阅与音源',exact:false}).click();await page.locator('input[type=file]').first().setInputFiles('public/assets/demo.wav');await expect(lyrics).toHaveCount(0);
  if(errors.length)throw Error(errors.join('\n'));
  console.log('PASS lyrics: 23 phrases, instrumental gaps/codas hidden, above score, default German/Chinese, all 3 languages and keyboard, playback/pause/mode isolation, 320/390px, unknown audio isolation, single audio; v2 102 guides loaded');
 }finally{await browser?.close();server.kill()}

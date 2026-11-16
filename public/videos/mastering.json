@@ -1,0 +1,18 @@
+[
+  {
+    "file": "intro-abyss.mp4",
+    "source": "intro-abyss.mp4",
+    "duration": 16.13,
+    "videoFilter": "fade=t=in:st=0:d=0.8,fade=t=out:st=14.93:d=1.2",
+    "audioFilter": "afade=t=in:st=0:d=0.8,afade=t=out:st=14.6:d=1.53",
+    "sha256": "e3cd47d00011962da8777e88bcee92910288a7e364d7ac2f1c9e3fcbb4606eb6"
+  },
+  {
+    "file": "intro-resurrection.mp4",
+    "source": "intro-resurrection.mp4.mp4",
+    "duration": 21.97,
+    "videoFilter": "fade=t=in:st=0:d=1",
+    "audioFilter": "afade=t=in:st=0:d=1,afade=t=out:st=19.5:d=2.47",
+    "sha256": "ff04787847905da85ab2a8c80176ff6b5e38ca0ad2bb4c83d7fa0e21b00ef17d"
+  }
+]

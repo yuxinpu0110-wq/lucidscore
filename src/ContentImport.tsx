@@ -6,7 +6,7 @@ import {authorGuideRevisions} from './authorFiles';
 
 export function ContentImport({data,reference,measures,research,onApply,onReset}:{data:GuideData;reference:GuideData;measures:MeasureSyncData;research:MeasureResearch;onApply:(data:GuideData)=>void;onReset:()=>void}){
  const revision=authorGuideRevisions[reference.movement];
- const storageKey=revision==='v1.0'?`mahler-development-guides-markdown-v2:${reference.movement}`:`mahler-development-guides-markdown-v3:${reference.movement}:${revision}`;
+ const storageKey=revision==='v1.0'?`lucidscore_development_guides_markdown-v2:${reference.movement}`:`lucidscore_development_guides_markdown-v3:${reference.movement}:${revision}`;
  const input=useRef<HTMLInputElement>(null);const[message,Message]=useState(''),[error,ErrorMessage]=useState(''),[busy,Busy]=useState(false);const token=useRef(0);
  function parse(text:string){return validateGuides(parseGuideMarkdown(text),measures,research,reference)}
  useEffect(()=>{try{const saved=localStorage.getItem(storageKey);if(saved){onApply(parse(saved));Message('已恢复本浏览器上次导入的导读。')}}catch(e){ErrorMessage(`保存的导读未载入：${String(e)}`)}},[]);

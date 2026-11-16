@@ -1,3 +1,4 @@
+import {intervalIndex,identityAt} from './intervalLookup.ts';
 import {z} from 'zod';
 import type {Catalog} from './model';
 const hash=z.string().regex(/^sha256:[a-f0-9]{64}$/);
@@ -14,6 +15,6 @@ export function validateSync(raw:unknown,catalog:Catalog,scoreFingerprint?:strin
  const trackIds=new Set<string>();for(const t of d.tracks){if(trackIds.has(t.id))throw Error('同步音轨重复');trackIds.add(t.id);const original=catalog.tracks.find(x=>x.id===t.id);if(!original||original.movement!==d.movement||original.fingerprint!==t.fingerprint||Math.abs(original.duration-t.duration)>.01)throw Error('同步音轨指纹或时长不匹配');let end=0;for(const i of t.intervals){if(!ids.has(i.regionId)||i.end<=i.start||i.start<end-.001||i.end>t.duration+.001)throw Error('同步区间引用、重叠或边界无效');end=i.end}}
  return d;
 }
-export function syncAt(d:ScoreSyncData,trackId:string,fingerprint:string,time:number){const t=d.tracks.find(t=>t.id===trackId&&t.fingerprint===fingerprint);const interval=t?.intervals.find(i=>i.start<=time&&time<i.end);return interval?{interval,region:d.regions.find(r=>r.id===interval.regionId)!}:null}
+export function syncAt(d:ScoreSyncData,trackId:string,fingerprint:string,time:number){const t=d.tracks.find(t=>t.id===trackId&&t.fingerprint===fingerprint);const interval=t?.intervals[intervalIndex(t.intervals,time)];return interval?{interval,region:identityAt(d.regions,interval.regionId)!}:null}
 export function regionIntervals(d:ScoreSyncData,regionId:string){return d.tracks.flatMap(t=>t.intervals.filter(i=>i.regionId===regionId).map(i=>({trackId:t.id,fingerprint:t.fingerprint,...i})))}
 export function annotationDraft(d:ScoreSyncData,regionId:string,note:string){if(!d.regions.some(r=>r.id===regionId))throw Error('谱段不存在');return{version:1,kind:'score_annotation_draft',edition:d.edition,scoreFingerprint:d.scoreFingerprint,regionId,note,status:'needs_review',granularity:d.granularity,alignments:regionIntervals(d,regionId)}}

@@ -1,3 +1,4 @@
+import {intervalIndex,identityAt} from './intervalLookup.ts';
 import {z} from 'zod';
 import type {Catalog} from './model';
 import type {ScoreSyncData} from './scoreSyncModel';
@@ -11,7 +12,7 @@ export function parseLyricsMarkdown(raw:string):LyricsDocument{
  if(lines[0]!=='---')throw Error('唱词文件缺少元信息');
  const meta:Record<string,string>={};let at=1;
  for(;at<lines.length&&lines[at]!=='---';at++){const m=/^(format|edition|movement|title|source):\s*(.+)$/.exec(lines[at]);if(!m||meta[m[1]])throw Error('唱词元信息无效');meta[m[1]]=m[2].trim()}
- if(at===lines.length||meta.format!=='mahler-lexicon-lyrics/1'||!['4','5'].includes(meta.movement))throw Error('唱词格式或乐章无效');
+ if(at===lines.length||meta.format!=='lucidscore-lyrics/1'||!['4','5'].includes(meta.movement))throw Error('唱词格式或乐章无效');
  const lyrics:Lyric[]=[];let current:Partial<Lyric>|null=null;
  function finish(){if(!current)return;const entry=lyric.parse(current);if(entry.from>entry.to||entry.to>(meta.movement==='4'?67:762)||lyrics.some(l=>l.id===entry.id))throw Error('唱词小节范围或编号无效');lyrics.push(entry)}
  for(at++;at<lines.length;at++){
@@ -38,6 +39,6 @@ export function validateLyricsSync(raw:unknown,library:Record<number,LyricsDocum
 }
 export function lyricAt(data:LyricsSync,library:Record<number,LyricsDocument>,movement:number,trackId:string,fingerprint:string,time:number){
  const track=data.tracks.find(t=>t.movement===movement&&t.id===trackId&&t.fingerprint===fingerprint);
- const interval=track?.intervals.find(i=>i.start<=time&&time<i.end);
- return interval?library[movement]?.lyrics.find(l=>l.id===interval.lyricId)||null:null;
+ const interval=track?.intervals[intervalIndex(track.intervals,time)];
+ return interval?identityAt(library[movement].lyrics,interval.lyricId)||null:null;
 }

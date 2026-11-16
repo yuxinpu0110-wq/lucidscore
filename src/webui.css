@@ -1,10 +1,10 @@
 /* Visual layer for webui_agent.md. Audio and score identities remain in models. */
 :root {
-  --font-display: 'Cormorant Garamond', 'EB Garamond', Georgia, serif;
-  --font-chinese: 'Noto Serif SC', 'Songti SC', SimSun, serif;
-  --font-label: 'Libre Caslon Text', Optima, serif;
-  --font-body: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
-  --font-number: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --font-display: 'Cormorant Garamond', 'Noto Serif SC', Georgia, serif;
+  --font-chinese: 'Noto Serif SC', 'Cormorant Garamond', Georgia, serif;
+  --font-label: var(--font-display);
+  --font-body: var(--font-chinese);
+  --font-number: var(--font-display);
 }
 body, main {
   --ink: var(--text-primary, #e2ece9);
@@ -422,6 +422,7 @@ main[data-movement='5'] .ambient-layer { opacity: 0; transition: none; }
 
 /* Optical locator: the scan remains sharp; only the rim is refracted. */
 .score-viewport .score-follow-page { position: relative; }
+.measure-lens-camera { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 10; pointer-events: none; transform-origin: top left; }
 .measure-liquid-lens {
  --lens-tint: color-mix(in srgb,var(--accent-primary) 8%,transparent);
  position: absolute;
@@ -434,12 +435,14 @@ main[data-movement='5'] .ambient-layer { opacity: 0; transition: none; }
  background: linear-gradient(165deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.03) 45%,var(--lens-tint) 100%);
  backdrop-filter: brightness(1.28) contrast(1.12) saturate(1.4);
  -webkit-backdrop-filter: brightness(1.28) contrast(1.12) saturate(1.4);
- box-shadow: inset 0 1.5px 1px rgba(255,255,255,.55),inset 1px 0 1px rgba(255,255,255,.35),inset 0 -1.5px 2px var(--accent-primary),inset 0 0 0 1px rgba(255,255,255,.14),0 12px 28px -6px rgba(0,0,0,.55),0 0 calc(20px + var(--audio-mid,0)*20px) -4px var(--accent-glow);
- will-change: transform,width,height;
- transform-origin: center center;
+ box-shadow: inset 0 1.5px 1px rgba(255,255,255,.55),inset 1px 0 1px rgba(255,255,255,.35),inset 0 -1.5px 2px var(--accent-primary),inset 0 0 0 1px rgba(255,255,255,.14),0 8px 18px -6px rgba(0,0,0,.4);
+ will-change: transform;
+ transform-origin: top left;
  overflow: hidden;
 }
 .measure-liquid-lens[data-ready='true'] { visibility: visible; }
+/* Keep the same optical material throughout a slide; toggling the backdrop
+   filter at animation boundaries causes a visible dim/bright flash. */
 .measure-lens-rim {
  position: absolute;
  inset: 0;
@@ -450,11 +453,12 @@ main[data-movement='5'] .ambient-layer { opacity: 0; transition: none; }
  -webkit-mask-composite: xor;
  mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
  mask-composite: exclude;
- filter: url('#liquid-lens-refraction');
+ /* A static gradient rim avoids the per-frame SVG turbulence pass. */
+ filter: none;
  pointer-events: none;
 }
 .measure-liquid-lens::after {
- content: '';
+ content: none;
  position: absolute;
  inset: -20%;
  background: linear-gradient(105deg,transparent 35%,rgba(255,255,255,calc(.05 + var(--lens-velocity,0)*.22)) 50%,transparent 65%);
@@ -477,6 +481,10 @@ main[data-movement='5'] .ambient-layer { opacity: 0; transition: none; }
 }
 
 /* Audio-reactive atmosphere. Only decorative light is blurred. */
+.playback-buffer { position: relative; min-height: 4px; }
+.playback-buffer-track { height: 2px; position: relative; overflow: hidden; border-radius: 2px; background: color-mix(in srgb,var(--text-primary) 6%,transparent); }
+.playback-buffer-track span { position: absolute; top: 0; height: 100%; background: color-mix(in srgb,var(--accent-primary) 38%,transparent); }
+.playback-buffer-message { display: block; margin-top: 5px; font-size: 11px; line-height: 1.4; color: var(--text-secondary); }
 .ambient-canvas { overflow: hidden; background-color: var(--bg-canvas); }
 .ambient-orb-primary,.ambient-orb-secondary { position: absolute; border-radius: 50%; pointer-events: none; will-change: transform,opacity; }
 .ambient-orb-primary {

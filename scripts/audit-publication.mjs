@@ -6,8 +6,8 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const output=execFileSync('git',['ls-files','--stage','-z'],{cwd:root,encoding:'utf8'});
 const entries=output.split('\0').filter(Boolean).map(row=>{const i=row.indexOf('\t'),[mode,hash,stage]=row.slice(0,i).split(' ');return {mode,hash,stage,path:row.slice(i+1)}});
 if(!entries.length)throw Error('No staged project files');
-const forbidden=/(^|\/)(?:agents?\.md|webui_agent[^/]*|context[^/]*|PROJECT_OVERVIEW\.md|\.claude|\.codex|\.agents|\.aws|\.git|\.env(?:\.[^/]*)?|node_modules|tmp|dist)(\/|$)|^docs\/(?:PROGRESS|DECISIONS|WEBUI_DESIGN)\.md$|^release\/(?:Mahler-Lexicon-[^/]*|cache)(\/|$)/i;
-for(const e of entries){if(e.stage!=='0'||e.mode==='120000')throw Error('Unresolved index or symlink: '+e.path);if(forbidden.test(e.path))throw Error('Excluded local file staged: '+e.path)}
+const forbidden=/(^|\/)(?:agents?\.md|webui_agent[^/]*|context[^/]*|PROJECT_OVERVIEW\.md|\.claude|\.codex|\.agents|\.aws|\.git|\.env(?:\.[^/]*)?|node_modules|tmp|dist)(\/|$)|^docs\/(?:PROGRESS|DECISIONS|WEBUI_DESIGN)\.md$|^release\/(?:LucidScore-[^/]*|cache)(\/|$)/i;
+for(const e of entries){if(e.stage!=='0'||e.mode==='120000')throw Error('Unresolved index or symlink: '+e.path);if(e.path!=='.env.example'&&forbidden.test(e.path))throw Error('Excluded local file staged: '+e.path)}
 const sizes=execFileSync('git',['cat-file','--batch-check=%(objectname) %(objectsize)'],{cwd:root,input:entries.map(e=>e.hash).join('\n')+'\n',encoding:'utf8'}).trim().split('\n').map(line=>Number(line.split(' ')[1]));
 for(const [i,size]of sizes.entries())if(size>=100*1024*1024)throw Error('GitHub oversized blob: '+entries[i].path);
 try{

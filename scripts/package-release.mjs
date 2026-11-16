@@ -9,12 +9,12 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),release=resolve
 const pkg=JSON.parse(await readFile(resolve(root,'package.json'),'utf8')),version=pkg.version;
 if(!/^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(version))throw Error('Invalid release version');
 if(process.platform!=='win32'||process.arch!=='x64')throw Error('Build this Windows x64 portable package with Windows x64 Node.js.');
-const name=`Mahler-Lexicon-v${version}-windows-x64`,bundle=resolve(release,name),archive=resolve(release,name+'.zip');
+const name=`LucidScore-v${version}-windows-x64`,bundle=resolve(release,name),archive=resolve(release,name+'.zip');
 const inside=relative(release,bundle);if(isAbsolute(inside)||inside.startsWith('..')||bundle===release)throw Error('Unsafe output directory');
 let present=false;try{await stat(bundle);present=true}catch(error){if(error.code!=='ENOENT')throw error}
-if(present){const old=JSON.parse(await readFile(resolve(bundle,'version.json'),'utf8'));if(old.application!=='Mahler Lexicon')throw Error('Refusing to replace an unknown directory');await rm(bundle,{recursive:true})}
+if(present){const old=JSON.parse(await readFile(resolve(bundle,'version.json'),'utf8'));if(old.application!=='LucidScore')throw Error('Refusing to replace an unknown directory');await rm(bundle,{recursive:true})}
 await mkdir(resolve(bundle,'runtime'),{recursive:true});
-await writeFile(resolve(bundle,'version.json'),JSON.stringify({application:'Mahler Lexicon',version:'v'+version,build:'packaging'}));
+await writeFile(resolve(bundle,'version.json'),JSON.stringify({application:'LucidScore',version:'v'+version,build:'packaging'}));
 const forbidden=/(^|\/)(?:agents?\.md|webui_agent[^/]*|context[^/]*|\.claude|\.codex|\.agents|\.aws|\.git|\.env[^/]*)(\/|$)/i;
 async function copyTree(from,to){await mkdir(to,{recursive:true});for(const e of await readdir(from,{withFileTypes:true})){if(e.isSymbolicLink())throw Error('Symlinks are not allowed in release');const source=resolve(from,e.name),target=resolve(to,e.name);if(e.isDirectory())await copyTree(source,target);else if(e.isFile())await copyFile(source,target)}}
 await copyTree(resolve(root,'dist'),resolve(bundle,'app'));
@@ -28,10 +28,10 @@ let license;try{license=await readFile(licenseCache,'utf8')}catch{
  const response=await fetch(`https://raw.githubusercontent.com/nodejs/node/${process.version}/LICENSE`);if(!response.ok)throw Error('Cannot obtain the matching Node.js license: '+response.status);license=await response.text();await writeFile(licenseCache,license);
 }
 if(!license.includes('Node.js')||!license.includes('Copyright'))throw Error('Unexpected runtime license');await writeFile(resolve(bundle,'runtime/LICENSE.txt'),license);
-await writeFile(resolve(bundle,'THIRD_PARTY_NOTICES.txt'),`Node.js ${process.version}: bundled Windows x64 runtime. License and third-party notices: runtime/LICENSE.txt.\nRecording: Leonard Bernstein / New York Philharmonic / 1987, supplied as project resources. Score and content sources: https://github.com/yuxinpu0110-wq/Mahler-Lexicon/blob/main/docs/SOURCES.md\n`);
+await writeFile(resolve(bundle,'THIRD_PARTY_NOTICES.txt'),`Node.js ${process.version}: bundled Windows x64 runtime. License and third-party notices: runtime/LICENSE.txt.\nRecording: Leonard Bernstein / New York Philharmonic / 1987, supplied as project resources. Score and content sources: https://github.com/yuxinpu0110-wq/lucidscore/blob/main/docs/SOURCES.md\n`);
 const hashFile=async path=>{const hash=createHash('sha256');for await(const chunk of createReadStream(path))hash.update(chunk);return hash.digest('hex')};
 const appIndex=await readFile(resolve(bundle,'app/index.html'));const build=createHash('sha256').update(appIndex).digest('hex').slice(0,16);
-const metadata={application:'Mahler Lexicon',version:'v'+version,build,platform:'windows-x64',runtime:process.version};
+const metadata={application:'LucidScore',version:'v'+version,build,platform:'windows-x64',runtime:process.version};
 await writeFile(resolve(bundle,'version.json'),JSON.stringify(metadata,null,2)+'\n');
 const entries=[];
 async function inventory(directory){for(const e of await readdir(directory,{withFileTypes:true})){const file=resolve(directory,e.name),name=relative(bundle,file).replaceAll('\\','/');if(forbidden.test(name))throw Error('Excluded working file in release: '+name);if(e.isDirectory())await inventory(file);else{const info=await stat(file);entries.push({path:name,bytes:info.size,sha256:await hashFile(file)})}}}

@@ -1,5 +1,23 @@
 ﻿# 导读 Markdown 格式 v1
 
+## 单独编辑全部启发提示
+
+编辑 [INSPIRATION_PROMPTS.md](../content/INSPIRATION_PROMPTS.md)。109条包括五乐章导读102条、已核验提示2条、演示提示3条和核对草稿2条。常规启发播放主要使用102条导读；草稿保留供核对。
+
+每条保留编号、标题、位置、来源和 `### 提示`，只改提示下的一行纯文字。可以用陈述、观察或聆听建议，不必写问句。导读每条最多90字，其余每条最多50字。
+
+```sh
+npm run prompts:check
+npm run prompts:apply
+npm run build
+```
+
+校验拒绝遗漏／重复条目、修改编号／位置／来源、空正文及超长提示。apply在全部校验通过后仅把提示写回对应作者稿或cue字段，保留其余正文和定位数据。保存编辑稿本身不会改动网页。已有浏览器本地导读覆盖时，在开发工具中恢复项目内置导读后才能看到更新的内置提示。
+
+`npm run prompts:export`用于首次从运行时来源生成编辑稿；已存在时拒绝覆盖，以保护编辑中的文件。需要重新导出时先备份并移走旧稿。
+
+## 编辑完整导读
+
 直接编辑[当前作者稿](../content/listen_guide/README.md)：第一、二、五乐章为 `v2.0/m1.md`、`v2.0/m2.md`、`v2.0/m5.md`；第三、四乐章继续使用 v1.0 对应文件。当前共102段。路径映射维护于 `src/authorFiles.ts`。旧 `content/real/listening-guides.md` 仅保留作兼容样例。
 
 开发版运行 `npm run dev`，先选择要编辑的乐章，再在页面下方展开“开发工具 · 小节定位与整章核对”，使用“导入解读 Markdown”。整份文件通过校验后，当前乐章的赏析、结构、和声、配器和提示同时更新，不会重置播放位置；不同乐章分别保存。错误乐章、错误格式或引用会被拒绝，原内容保持可用。
@@ -12,7 +30,7 @@
 
 ```markdown
 ---
-format: mahler-lexicon-guides/1
+format: lucidscore-guides/1
 edition: mahler2-imslp415748-ue-scan
 movement: 3
 ---

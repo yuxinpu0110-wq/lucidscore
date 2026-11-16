@@ -1,3 +1,4 @@
+import {intervalIndex,identityAt} from './intervalLookup.ts';
 import {z} from 'zod';
 import type {Catalog} from './model';
 import type {ScoreSyncData} from './scoreSyncModel';
@@ -31,6 +32,6 @@ export function validateMeasures(raw:unknown,catalog:Catalog,score:ScoreSyncData
 export function validateMeasureResearch(raw:unknown,d:MeasureSyncData):MeasureResearch{
  const r=researchSchema.parse(raw);if(r.edition!==d.edition||r.scoreFingerprint!==d.scoreFingerprint)throw Error('研究札记谱本不匹配');const ids=new Set<string>();for(const n of r.notes){if(ids.has(n.id)||n.to<n.from)throw Error('研究札记范围或 ID 无效');ids.add(n.id)}return r;
 }
-export function measureAt(d:MeasureSyncData,trackId:string,fingerprint:string,time:number){const t=d.tracks.find(t=>t.id===trackId&&t.fingerprint===fingerprint);const interval=t?.intervals.find(i=>i.start<=time&&time<i.end);const measure=interval&&d.measures.find(m=>m.id===interval.measureId);return interval&&measure?{interval,measure}:null}
+export function measureAt(d:MeasureSyncData,trackId:string,fingerprint:string,time:number){const t=d.tracks.find(t=>t.id===trackId&&t.fingerprint===fingerprint);const interval=t?.intervals[intervalIndex(t.intervals,time)];const measure=interval&&identityAt(d.measures,interval.measureId);return interval&&measure?{interval,measure}:null}
 export function measureIntervals(d:MeasureSyncData,id:string){return d.tracks.flatMap(t=>t.intervals.filter(i=>i.measureId===id).map(i=>({trackId:t.id,fingerprint:t.fingerprint,...i})))}
 export function measureDraft(d:MeasureSyncData,m:Measure,note:string,contextIds:string[]){return{version:1,kind:'measure_annotation_draft',edition:d.edition,scoreFingerprint:d.scoreFingerprint,measureId:m.id,measureNumber:m.number,page:m.page,system:m.system,scoreBox:m.box,status:'needs_review',timing:'estimated',note,contextIds,alignments:measureIntervals(d,m.id)}}

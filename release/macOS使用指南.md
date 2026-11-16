@@ -1,13 +1,13 @@
-# Mahler Lexicon · macOS 使用指南
+# LucidScore · macOS 使用指南
 
 ## 选择下载文件
 
-打开 [发行版下载页](https://github.com/yuxinpu0110-wq/Mahler-Lexicon/releases/latest)，在 Assets 中选择：
+打开 [发行版下载页](https://github.com/yuxinpu0110-wq/lucidscore/releases/latest)，在 Assets 中选择：
 
 | Mac 类型 | 下载文件 |
 | --- | --- |
-| Apple 芯片（M1／M2／M3／M4等） | `Mahler-Lexicon-v0.1.0-macos-arm64.zip` |
-| Intel 处理器 | `Mahler-Lexicon-v0.1.0-macos-x64.zip` |
+| Apple 芯片（M1／M2／M3／M4等） | `LucidScore-v0.1.0-macos-arm64.zip` |
+| Intel 处理器 | `LucidScore-v0.1.0-macos-x64.zip` |
 
 可以在  →“关于本机”查看“芯片／处理器”。需要 **macOS 13.5 或更新版本**，这是随包提供的 Node.js 24 运行时的系统要求：[Node.js 官方说明](https://github.com/nodejs/nodejs.org/blob/main/apps/site/pages/en/blog/migrations/v22-to-v24.mdx)。
 
@@ -25,7 +25,7 @@
 可在终端校验下载文件，例如 Apple 芯片版：
 
 ```sh
-shasum -a 256 ~/Downloads/Mahler-Lexicon-v0.1.0-macos-arm64.zip
+shasum -a 256 ~/Downloads/LucidScore-v0.1.0-macos-arm64.zip
 ```
 
 结果应与下载页同名 `.sha256` 附件一致。ZIP 已记录 START.command 和 runtime/node 的可执行权限；如使用其他解压工具导致权限丢失，可重新用系统“归档实用工具”解压。
@@ -39,7 +39,7 @@ shasum -a 256 ~/Downloads/Mahler-Lexicon-v0.1.0-macos-arm64.zip
 - 系统开启减少动态效果时，光场起伏和定位透镜弹性会减少。
 - 退出时先暂停，在启动终端按 Control+C，或关闭该终端窗口。只关闭网页不会结束本地服务器。
 
-更多操作和内容精度说明见 [通用使用指南](https://github.com/yuxinpu0110-wq/Mahler-Lexicon/blob/main/release/使用指南.md)。小节时间与框选仍是既有待校核估计，不因增加Mac封装而提高准确性。
+更多操作和内容精度说明见 [通用使用指南](https://github.com/yuxinpu0110-wq/lucidscore/blob/main/release/使用指南.md)。小节时间与框选仍是既有待校核估计，不因增加Mac封装而提高准确性。
 
 ## 本次验证范围
 

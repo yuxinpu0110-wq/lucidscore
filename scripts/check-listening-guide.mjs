@@ -11,7 +11,7 @@ try{
  browser=await chromium.launch({channel:'msedge',headless:true});
  const page=await browser.newPage({viewport:{width:1280,height:900}});
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto('http://127.0.0.1:5193');
+ await page.goto('http://127.0.0.1:5193');await page.locator('nav button').nth(2).click();
  const closer=page.locator('.explore');
  const score=closer.locator('.current-score');
  await expect(closer).toBeVisible();
@@ -23,7 +23,7 @@ try{
  await score.getByLabel('小节号').fill('465');
  await expect(page.locator('audio')).toHaveJSProperty('paused',true);
  await expect(page.getByLabel('播放位置',{exact:true})).not.toHaveValue('0');
- await expect(score).toContainText('第 465 小节');
+ await expect(score.getByLabel('小节号',{exact:true})).toHaveValue('465');
  await expect(closer.getByRole('region',{name:'第三乐章导读'})).toContainText('转轮被撕开');
  await expect(page.locator('audio')).toHaveJSProperty('paused',true);
  await closer.getByRole('region',{name:'第三乐章导读'}).getByRole('radio',{name:'和声'}).check();
@@ -31,7 +31,7 @@ try{
  await expect(score.locator('.measure-liquid-lens')).toHaveCount(1);
  await closer.locator('.guide-index summary').click();
  await closer.locator('.guide-index').getByRole('button',{name:/257—260/}).click();
- await expect(score).toContainText('第 257 小节');
+ await expect(score.getByLabel('小节号',{exact:true})).toHaveValue('257');
  await expect(closer.locator('.guide-heading')).toContainText('四小节的旁支');
  await expect(page.locator('audio')).toHaveJSProperty('paused',true);
  await page.getByRole('radio',{name:'启发探索'}).check();
@@ -41,16 +41,12 @@ try{
  await expect(page.locator('audio')).toHaveJSProperty('paused',true);
  await expect(closer.locator('.guide-heading')).toContainText('四小节的旁支');
  await page.getByRole('radio',{name:'自由检索'}).check();
- await score.getByRole('button',{name:'跟随播放'}).click();
- await expect(score).toContainText('估计位置');
- await closer.locator('.verified-comparisons summary').click();
- await closer.getByRole('textbox',{name:'检索已收录条目'}).fill('开头第一组');
- await closer.locator('.cards button').first().click();
- await expect(score.locator('.measure-liquid-lens')).toHaveCount(1);
- await expect(closer.locator('.listening-score img')).toBeVisible();
+ await score.getByRole('button',{name:'回到当前小节'}).click();
+ await expect(score.locator('.is-following')).toBeVisible();
+ await expect(closer.locator('.verified-comparisons,.range')).toHaveCount(0);
  await page.setViewportSize({width:390,height:844});
  if(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth))throw Error('narrow layout overflow');
  await closer.screenshot({path:'docs/listen-closer-guide.png'});
  if(errors.length)throw Error(errors.join('\n'));
- console.log('PASS Listen Closer: visible while playing, score and guide seek pause, 23 sourced guides, secondary A/B comparison, excerpt, narrow layout');
+ console.log('PASS Listen Closer: visible while playing, score and guide seek pause, 23 sourced guides, no legacy comparison/range widgets, narrow layout');
 }finally{await browser?.close();server.kill()}

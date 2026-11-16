@@ -16,7 +16,17 @@ try{
  await position(511);expect(Number(await page.locator('.ambient-horizon-dawn').evaluate(el=>getComputedStyle(el).opacity))).toBeCloseTo(.45,2);
  for(const [bar,name]of [[500,'whisper'],[550,'mist'],[620,'daybreak'],[740,'gold']]){await position(bar);await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:`docs/dawn-${name}.png`})}
  await position(579);expect(Math.max(...await canvasColor())).toBeLessThan(130);
- await position(639);expect(Math.min(...await canvasColor())).toBeGreaterThan(200);
+ await position(640);expect(await progress()).toBeLessThan(.85);
+ await position(711);const beforeClimax=await canvasColor();expect(await progress()).toBeCloseTo(.72,3);
+ await position(712);const climax=await canvasColor();expect(await progress()).toBeCloseTo(.95,3);
+ expect(fifth.tracks[0].intervals[711].start).toBe(2147);
+ await expect(page.getByRole('spinbutton',{name:'小节号',exact:true})).toHaveValue('712');
+ expect(Math.min(...climax)-Math.min(...beforeClimax)).toBeGreaterThan(35);
+ // The deliberate palette change reaches the bright layer within this bar.
+ await position(711);await page.emulateMedia({reducedMotion:'no-preference'});
+ const climaxSpan=fifth.tracks[0].intervals[711];await audio.evaluate((a,t)=>{a.currentTime=t;a.dispatchEvent(new Event('timeupdate'))},climaxSpan.start+.001);
+ await expect.poll(progress,{timeout:1500}).toBeGreaterThan(.93);
+ await page.emulateMedia({reducedMotion:'reduce'});
  await position(762);const final=await canvasColor();for(const [i,n]of [250,247,240].entries())expect(final[i]).toBeCloseTo(n,0);
  // A seek crosses the palette through damping, rather than instantly repainting.
  await page.emulateMedia({reducedMotion:'no-preference'});
@@ -28,11 +38,11 @@ try{
  await expect.poll(()=>page.evaluate(()=>Number(getComputedStyle(document.documentElement).getPropertyValue('--audio-mid')))).toBeGreaterThan(.001);
  expect(await page.evaluate(()=>window.__sources)).toBe(1);await expect(audio).toHaveCount(1);await expect(audio).toHaveJSProperty('paused',false);
  const dock=page.locator('.floating-player-dock'),stage=page.locator('.focus-stage-container'),clue=page.locator('.focus-clue-button');
- expect((await dock.boundingBox()).width).toBeLessThanOrEqual(720.1);expect(await dock.evaluate(el=>getComputedStyle(el).borderRadius)).toBe('999px');
+ expect((await dock.boundingBox()).width).toBeLessThanOrEqual(1440);expect(await dock.evaluate(el=>getComputedStyle(el).borderRadius)).toBe('18px');
  expect(await stage.evaluate(el=>getComputedStyle(el).backgroundColor)).toBe('rgba(0, 0, 0, 0)');expect(await stage.evaluate(el=>getComputedStyle(el).boxShadow)).toBe('none');
  await expect(clue).toBeVisible();await expect(page.locator('.guide-depth')).toBeHidden();
- await page.mouse.move(0,0);await expect.poll(()=>page.locator('.player-prelude').evaluate(el=>Number(getComputedStyle(el).opacity))).toBeCloseTo(.2,2);
- await page.locator('.player-prelude').hover();await expect.poll(()=>page.locator('.player-prelude').evaluate(el=>Number(getComputedStyle(el).opacity))).toBeCloseTo(.9,2);await page.mouse.move(0,0);await expect.poll(()=>page.locator('.player-prelude').evaluate(el=>Number(getComputedStyle(el).opacity))).toBeCloseTo(.2,2);
+ await page.mouse.move(0,0);await expect.poll(()=>page.locator('.stage-tools').evaluate(el=>Number(getComputedStyle(el).opacity))).toBeCloseTo(1,2);
+ await page.locator('.stage-tools').hover();await expect.poll(()=>page.locator('.stage-tools').evaluate(el=>Number(getComputedStyle(el).opacity))).toBeCloseTo(1,2);await page.mouse.move(0,0);await expect.poll(()=>page.locator('.stage-tools').evaluate(el=>Number(getComputedStyle(el).opacity))).toBeCloseTo(1,2);
  await page.locator('.player').screenshot({path:'docs/poetic-stage.png'});
  // Only the words animate when the clue changes; keyboard focus stays put.
  await clue.focus();const before=await clue.getAttribute('aria-label');const next=fifth.tracks[0].intervals[511];await audio.evaluate((a,t)=>{a.currentTime=t;a.dispatchEvent(new Event('timeupdate'))},next.start+.02);
@@ -46,6 +56,6 @@ try{
  await page.locator('nav button').nth(1).click();await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);await page.getByRole('button',{name:'播放',exact:true}).click();expect(await page.evaluate(()=>window.__sources)).toBe(1);await page.getByRole('button',{name:'暂停并探索',exact:true}).click();
  // Unsupported analysis keeps native playback usable and uses a slow visual fallback.
  const fallback=await browser.newPage();await fallback.addInitScript(()=>{Object.defineProperty(window,'AudioContext',{value:undefined,configurable:true});Object.defineProperty(window,'webkitAudioContext',{value:undefined,configurable:true})});
- await fallback.goto('http://127.0.0.1:5203');await fallback.waitForFunction(()=>document.querySelector('audio').readyState>=1);await fallback.getByRole('button',{name:'播放',exact:true}).click();await expect(fallback.locator('html')).toHaveAttribute('data-audio-reactive','fallback');await expect.poll(()=>fallback.locator('audio').evaluate(a=>a.currentTime)).toBeGreaterThan(.1);await fallback.close();
+ await fallback.goto('http://127.0.0.1:5203');await fallback.waitForFunction(()=>document.querySelector('audio').readyState>=1);await fallback.getByRole('button',{name:'开始聆听',exact:true}).click();await expect(fallback.locator('html')).toHaveAttribute('data-audio-reactive','fallback');await expect.poll(()=>fallback.locator('audio').evaluate(a=>a.currentTime)).toBeGreaterThan(.1);await fallback.close();
  expect(errors).toEqual([]);console.log('PASS four staged dawn palettes, dark ppp entry, horizon, damped seeks, real FFT, one reusable audio graph, poetic stage/dock, dim/hover, focus-preserving cue, pause/explore, keyboard switches, narrow, reduced motion and native fallback');
 }finally{await browser?.close();server.kill()}

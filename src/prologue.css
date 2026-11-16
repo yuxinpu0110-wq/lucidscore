@@ -1,0 +1,42 @@
+.intro-prologue { position:fixed; inset:0; width:100%; max-width:none; height:100dvh; max-height:none; margin:0; padding:0; border:0; background:#050608; color:#f4f0ea; overflow:hidden; }
+.intro-prologue::backdrop { background:#050608; }
+.lobby-return-prologue { position:fixed; right:calc(18px + env(safe-area-inset-right)); bottom:calc(14px + env(safe-area-inset-bottom)); z-index:20; padding:8px 12px; min-height:36px; border:0; border-radius:999px; background:transparent; box-shadow:none; color:var(--text-secondary); font:12px/1.5 var(--font-body); opacity:.65; }
+.lobby-return-prologue:hover,.lobby-return-prologue:focus-visible { opacity:1; background:var(--glass-surface); }
+.prologue-screen { width:100%; height:100%; position:relative; isolation:isolate; }
+.prologue-screen video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 40%; pointer-events:none; }
+.prologue-screen[data-frozen=true] video { filter:brightness(.55) blur(3px); transition:filter 1.2s ease; }
+.prologue-vignette { position:absolute; inset:0; background:radial-gradient(circle at center,rgba(5,6,8,.15),rgba(5,6,8,.75)); pointer-events:none; }
+.intro-prologue button { min-height:44px; border:1px solid rgba(255,255,255,.2); background:rgba(25,29,35,.42); color:#f4f0ea; box-shadow:inset 0 1px 0 rgba(255,255,255,.15); backdrop-filter:blur(18px); border-radius:999px; font-size:13px; }
+.prologue-skip { position:absolute; right:calc(20px + env(safe-area-inset-right)); top:calc(20px + env(safe-area-inset-top)); z-index:3; }
+.prologue-copy { position:absolute; left:8%; right:8%; top:62%; text-align:center; pointer-events:none; }
+.prologue-caption { font:400 clamp(24px,3vw,44px)/1.7 'Noto Serif SC',serif; letter-spacing:.18em; text-shadow:0 0 25px rgba(255,255,255,.2),0 3px 24px #000; animation:prologue-words .75s ease both; }
+.prologue-copy[data-decisions=true] { top:48%; }
+.prologue-copy[data-decisions=true] .prologue-caption { font-size:clamp(20px,2.2vw,32px); letter-spacing:.08em; }
+.prologue-copy[data-credits=true] { top:50%; transition:top 1.1s cubic-bezier(.22,1,.36,1); }
+.prologue-copy[data-credits=true][data-decisions=true] { top:46%; }
+.prologue-credits { display:flex; flex-direction:column; align-items:center; gap:16px; animation:prologue-words 1.1s ease both; margin-bottom:30px; }
+.prologue-composer { margin:0; font:400 clamp(13px,1.2vw,17px)/1.5 'Noto Serif SC',serif; letter-spacing:.28em; color:rgba(246,239,225,.8); }
+.prologue-work-title { margin:0; padding:0; font:400 clamp(22px,3.3vw,46px)/1.5 'Noto Serif SC',serif; letter-spacing:.06em; color:#f4f0ea; text-shadow:0 3px 25px #000; }
+.prologue-original { margin:0; font:italic 400 clamp(14px,1.6vw,23px)/1.5 'Cormorant Garamond',serif; letter-spacing:.03em; color:rgba(196,197,201,.6); }
+.intro-prologue .prologue-advance-hint { border:0; box-shadow:none; background:transparent; backdrop-filter:none; font-size:11px; letter-spacing:.12em; opacity:.4; padding:6px 12px; }
+.intro-prologue .prologue-advance-hint:hover,.intro-prologue .prologue-advance-hint:focus-visible { opacity:.8; }
+.prologue-decisions { display:flex; justify-content:center; gap:18px; pointer-events:auto; animation:prologue-words 1s ease both; }
+.prologue-decisions button { padding:16px 26px; font-family:'Noto Serif SC',serif; }
+.prologue-decisions .prologue-guided { border-color:rgba(221,178,90,.7); box-shadow:inset 0 1px 0 rgba(255,232,180,.3),0 0 25px rgba(205,159,70,.14); }
+.prologue-aux { position:absolute; bottom:calc(28px + env(safe-area-inset-bottom)); left:16px; right:16px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:12px; }
+.prologue-aux p { width:100%; text-align:center; margin:0; font-size:12px; }
+.prologue-curtain { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; background:radial-gradient(ellipse at center,rgba(167,126,61,.14),rgba(5,6,8,.5) 70%); }
+.intro-prologue .prologue-ignite { padding:18px 28px; font:400 clamp(18px,3vw,25px)/1.5 'Noto Serif SC',serif; border-color:rgba(220,182,112,.5); animation:prologue-breath 3s ease-in-out infinite; }
+.prologue-curtain p { font-size:12px; letter-spacing:.06em; opacity:.6; margin:18px 0 6px; }
+.intro-prologue .prologue-silent-skip { border:0; box-shadow:none; background:none; backdrop-filter:none; opacity:.4; font-size:12px; }
+@keyframes prologue-breath { 50% { box-shadow:inset 0 1px 0 rgba(255,236,193,.25),0 0 40px rgba(193,147,72,.2); } }
+@keyframes prologue-words { from { opacity:0; transform:translateY(10px); } to { opacity:var(--caption-alpha,1); transform:translateY(0); } }
+@media(max-width:768px) { .prologue-screen video { object-position:58% 35%; } .prologue-copy { left:7%; right:7%; top:58%; } .prologue-copy[data-decisions=true] { top:42%; } .prologue-decisions { flex-direction:column; gap:12px; } .prologue-decisions button { padding:12px 16px; } .prologue-skip { top:calc(12px + env(safe-area-inset-top)); right:12px; } }
+@media(prefers-reduced-motion:reduce) { .prologue-caption,.prologue-decisions,.intro-prologue .prologue-ignite { animation:none; } }
+@media(max-width:768px) { .prologue-copy[data-credits=true] { top:42%; } .prologue-copy[data-credits=true][data-decisions=true] { top:38%; } .prologue-credits { gap:12px; margin-bottom:24px; } .prologue-work-title { font-size:clamp(20px,5vw,30px); letter-spacing:.02em; } }
+@media(prefers-reduced-motion:reduce) { .prologue-credits { animation:none; } .prologue-copy[data-credits=true] { transition:none; } }
+/* The opening conductor is at ~81% of the source frame, beyond the old crop. */
+@media(max-width:768px) {
+ .prologue-screen[data-scene='0'] video { object-position:84% 35%; }
+ .prologue-screen video { transition:object-position 1.2s ease; }
+}

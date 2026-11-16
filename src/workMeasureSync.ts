@@ -1,3 +1,4 @@
+import {intervalIndex,identityAt} from './intervalLookup.ts';
 import {z} from 'zod';
 import type {Catalog} from './model';
 import type {ScoreSyncData} from './scoreSyncModel';
@@ -45,8 +46,8 @@ export function validateWorkMeasures(raw:unknown,catalog:Catalog,scores:Record<n
 export function workMeasureAt(d:WorkMeasureData,trackId:string,fingerprint:string,time:number){
  const track=d.tracks.find(t=>t.id===trackId&&t.fingerprint===fingerprint);
  if(!track||!Number.isFinite(time)||time<0||time>=track.duration)return null;
- const interval=track?.intervals.find(i=>i.start<=time&&time<i.end);
- const measure=interval&&d.measures.find(m=>m.id===interval.measureId);
+ const interval=track?.intervals[intervalIndex(track.intervals,time)];
+ const measure=interval&&identityAt(d.measures,interval.measureId);
  return interval&&measure?{interval,measure}:null;
 }
 

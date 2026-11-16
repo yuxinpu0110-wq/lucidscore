@@ -1,5 +1,5 @@
 ---
-format: mahler-lexicon-guides/1
+format: lucidscore-guides/1
 edition: mahler2-imslp415748-ue-scan
 movement: 3
 ---

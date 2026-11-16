@@ -51,6 +51,16 @@ for a in anchors['movements']:
    measures.append(dict(id=identity,number=n,regionId=region['id'],sourceStart=round(float(src[j]),6),sourceEnd=round(float(src[j+1]),6),status='needs_review'))
    interval_end=track['duration'] if i==len(score['regions'])-1 and n==a['barCount'] else round(float(times[j+1]),6)
    intervals.append(dict(measureId=identity,start=round(float(times[j]),6),end=interval_end,status='needs_review'))
- documents.append(dict(version=1,movement=m,edition=score['edition'],scoreFingerprint=score['scoreFingerprint'],barCount=a['barCount'],granularity='estimated_measure_navigation',status='needs_review',method=anchors['method']+' Uniform subdivision inside each numbered video view, followed by the fingerprint-bound reference-to-project DTW. Full matched page/system shown; no claimed individual measure rectangle.',sources=score['sources'],readings=readings,notes=a['notes'],measures=measures,tracks=[dict(id=track['id'],fingerprint=track['fingerprint'],duration=track['duration'],intervals=intervals)],evidence=dict(referenceVideoSHA256=video_hash,referenceAudioSHA256=warp['inputs']['referenceAudioSHA256'],anchorFile='scripts/sync/work-measure-anchors.json',humanAuditionVerified=False)))
+ notes=list(a['notes'])
+ for correction in anchors.get('audioCorrections',[]):
+  if correction['movement']!=m:continue
+  assert correction['trackId']==track['id'] and correction['fingerprint']==track['fingerprint']
+  index=correction['bar']-1
+  assert 0<index<len(intervals)
+  assert abs(intervals[index]['start']-correction['estimatedStart'])<.00001
+  assert intervals[index-1]['start']<correction['start']<intervals[index]['end']
+  intervals[index-1]['end']=intervals[index]['start']=correction['start']
+  notes.append(correction['basis'])
+ documents.append(dict(version=1,movement=m,edition=score['edition'],scoreFingerprint=score['scoreFingerprint'],barCount=a['barCount'],granularity='estimated_measure_navigation',status='needs_review',method=anchors['method']+' Uniform subdivision inside each numbered video view, followed by the fingerprint-bound reference-to-project DTW. Full matched page/system shown; no claimed individual measure rectangle.',sources=score['sources'],readings=readings,notes=notes,measures=measures,tracks=[dict(id=track['id'],fingerprint=track['fingerprint'],duration=track['duration'],intervals=intervals)],evidence=dict(referenceVideoSHA256=video_hash,referenceAudioSHA256=warp['inputs']['referenceAudioSHA256'],anchorFile='scripts/sync/work-measure-anchors.json',humanAuditionVerified=False)))
  print(f'Movement {m}: {len(measures)} estimated bar positions from {len(readings)} locally numbered views',flush=True)
 Path('content/real/work-measure-sync.json').write_text(json.dumps(dict(version=1,movements=documents),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

@@ -6,6 +6,7 @@ playwright-report/
 .local/
 
 tmp/
+backups/
 __pycache__/
 *.pyc
 
@@ -14,6 +15,7 @@ __pycache__/
 .codex/
 .agents/
 .aws/
+.wrangler/
 **/[Aa][Gg][Ee][Nn][Tt].md
 **/[Aa][Gg][Ee][Nn][Tt][Ss].md
 **/[Ww][Ee][Bb][Uu][Ii]_[Aa][Gg][Ee][Nn][Tt]*
@@ -27,7 +29,10 @@ docs/WEBUI_DESIGN.md
 !.env.example
 
 # Compiled portable distributions are GitHub Release assets, not Git blobs.
-release/Mahler-Lexicon-*/
+release/LucidScore-*/
+release/*-windows-x64/
+release/*-macos-arm64/
+release/*-macos-x64/
 release/*.zip
 release/*.zip.sha256
 release/cache/

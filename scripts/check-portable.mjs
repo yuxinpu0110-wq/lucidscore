@@ -7,7 +7,7 @@ import {resolve,relative,isAbsolute,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),pkg=JSON.parse(await readFile(resolve(root,'package.json'),'utf8'));
-const name=`Mahler-Lexicon-v${pkg.version}-windows-x64`,archive=resolve(root,'release',name+'.zip');
+const name=`LucidScore-v${pkg.version}-windows-x64`,archive=resolve(root,'release',name+'.zip');
 const target=resolve(root,'tmp','portable-smoke-unpacked'),inside=relative(resolve(root,'tmp'),target);
 if(isAbsolute(inside)||inside.startsWith('..')||!inside)throw Error('Unsafe extraction directory');
 try{await stat(target);await readFile(resolve(target,'.portable-test-marker'));await rm(target,{recursive:true})}catch(error){if(error.code!=='ENOENT')throw error}
@@ -16,6 +16,7 @@ const unicode=resolve(target,'中文 路径');await mkdir(unicode);
 const quote=s=>"'"+s.replaceAll("'","''")+"'";
 execFileSync('powershell.exe',['-NoProfile','-NonInteractive','-WindowStyle','Hidden','-Command',`Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::ExtractToDirectory(${quote(archive)},${quote(unicode)})`],{windowsHide:true,stdio:'inherit'});
 const folder=resolve(unicode,name),manifest=JSON.parse(await readFile(resolve(folder,'manifest.json'),'utf8'));
+expect(manifest.version).toBe('v'+pkg.version);
 const forbidden=/(^|\/)(?:agents?\.md|webui_agent[^/]*|context[^/]*|\.claude|\.codex|\.agents|\.aws|\.git|\.env[^/]*)(\/|$)/i;
 const hashFile=async file=>{const hash=createHash('sha256');for await(const chunk of createReadStream(file))hash.update(chunk);return hash.digest('hex')};
 for(const entry of manifest.files){if(forbidden.test(entry.path))throw Error('Private working file in package: '+entry.path);const file=resolve(folder,entry.path);expect((await stat(file)).size).toBe(entry.bytes);expect(await hashFile(file)).toBe(entry.sha256)}
@@ -28,6 +29,8 @@ try{
  browser=await chromium.launch({channel:'msedge',headless:true});const page=await browser.newPage({viewport:{width:1280,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://**/*',route=>route.abort());await page.goto(base);await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);
  for(let movement=1;movement<=5;movement++){const response=await page.request.head(base+`audio/movement-${movement}-continuous.flac`);expect(response.status()).toBe(200);expect(Number(response.headers()['content-length'])).toBeGreaterThan(1000000)}
+ for(let movement=1;movement<=5;movement++){const response=await page.request.head(base+`audio/movement-${movement}-web.m4a`);expect(response.status()).toBe(200);expect(response.headers()['content-type']).toBe('audio/mp4')}
+ expect(await page.locator('audio').getAttribute('src')).toContain('-web.m4a');
  const response=await page.request.get(base+'audio/movement-5-continuous.flac',{headers:{Range:'bytes=100-199'}});expect(response.status()).toBe(206);expect((await response.body()).length).toBe(100);expect(response.headers()['content-range']).toMatch(/^bytes 100-199\//);
  expect((await page.request.get(base+'audio/movement-5-continuous.flac',{headers:{Range:'bytes=999999999999-'}})).status()).toBe(416);
  expect((await page.request.get(base+'%2e%2e%5cserver.mjs')).status()).toBe(404);expect((await page.request.get(base+'.git/config')).status()).toBe(404);expect((await page.request.post(base)).status()).toBe(405);
@@ -36,5 +39,6 @@ try{
  await page.setViewportSize({width:390,height:844});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.getByRole('radio',{name:'启发探索',exact:true}).check();await page.getByRole('button',{name:'播放',exact:true}).click();await expect(page.locator('.focus-clue-button')).toBeVisible();await page.getByRole('button',{name:'暂停并探索',exact:true}).click();
  await expect(page.getByRole('button',{name:'导入解读 Markdown'})).toHaveCount(0);await expect(page.locator('audio')).toHaveCount(1);expect(errors).toEqual([]);
- console.log(`PASS portable ZIP: ${actual.length} verified files; excluded working records absent; bundled runtime in Unicode path; offline-font fallback; 5 audio files, range/HEAD/416, path isolation, playback/FFT, bar/lyrics/lens, guided stage and narrow screen`);
+ await writeFile(resolve(root,'tmp',`portable-verification-v${pkg.version}.json`),JSON.stringify({version:pkg.version,archiveSHA256:await hashFile(archive),files:actual.length,verifiedAt:new Date().toISOString(),result:'passed'},null,2)+'\n');
+ console.log(`PASS portable ZIP: ${actual.length} verified files; excluded working records absent; bundled runtime in Unicode path; offline-font fallback; 5 FLAC and 5 AAC files, range/HEAD/416, path isolation, playback/FFT, bar/lyrics/lens, guided stage and narrow screen`);
 }finally{await browser?.close();server.kill()}

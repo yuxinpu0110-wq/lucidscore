@@ -54,15 +54,15 @@ for arch in (['arm64','x64'] if args.arch=='all' else [args.arch]):
   node=tar.extractfile(prefix+'/bin/node').read()
   license_text=tar.extractfile(prefix+'/LICENSE').read()
  if node[:4]!=b'\xcf\xfa\xed\xfe' or struct.unpack_from('<I',node,4)[0]!={'arm64':0x0100000c,'x64':0x01000007}[arch]:raise ValueError('Wrong native Mach-O architecture')
- name=f'Mahler-Lexicon-v{VERSION}-macos-{arch}'
+ name=f'LucidScore-v{VERSION}-macos-{arch}'
  folder=(RELEASE/name).resolve()
  # Verify an absolute child of release/ before replacing only our generated output.
  if folder.parent!=RELEASE.resolve():raise ValueError('Unsafe output path')
  if folder.exists():
-  if json.loads((folder/'version.json').read_text(encoding='utf-8')).get('application')!='Mahler Lexicon':raise ValueError('Unknown output directory')
+  if json.loads((folder/'version.json').read_text(encoding='utf-8')).get('application')!='LucidScore':raise ValueError('Unknown output directory')
   shutil.rmtree(folder)
  (folder/'runtime').mkdir(parents=True)
- metadata=dict(application='Mahler Lexicon',version='v'+VERSION,build='packaging',platform='macos-'+arch,runtime=NODE_VERSION,minimumMacOS='13.5',nativeTested=False,runtimeArchiveSHA256=expected)
+ metadata=dict(application='LucidScore',version='v'+VERSION,build='packaging',platform='macos-'+arch,runtime=NODE_VERSION,minimumMacOS='13.5',nativeTested=False,runtimeArchiveSHA256=expected)
  (folder/'version.json').write_text(json.dumps(metadata,indent=2)+'\n',encoding='utf-8')
  shutil.copytree(args.app_dir,folder/'app',symlinks=False)
  (folder/'runtime/node').write_bytes(node)
@@ -72,7 +72,7 @@ for arch in (['arm64','x64'] if args.arch=='all' else [args.arch]):
  for executable in ['START.command','runtime/node']:os.chmod(folder/executable,0o755)
  (folder/'README.md').write_text(guide,encoding='utf-8')
  (folder/'使用指南.txt').write_text(guide,encoding='utf-8')
- (folder/'THIRD_PARTY_NOTICES.txt').write_text(f'Node.js {NODE_VERSION}: official macOS {arch} runtime. Full licenses: runtime/LICENSE.txt\nRuntime archive: {BASE}/{filename}\nOfficial archive SHA-256: {expected}\nRecording and score sources: https://github.com/yuxinpu0110-wq/Mahler-Lexicon/blob/main/docs/SOURCES.md\n',encoding='utf-8')
+ (folder/'THIRD_PARTY_NOTICES.txt').write_text(f'Node.js {NODE_VERSION}: official macOS {arch} runtime. Full licenses: runtime/LICENSE.txt\nRuntime archive: {BASE}/{filename}\nOfficial archive SHA-256: {expected}\nRecording and score sources: https://github.com/yuxinpu0110-wq/lucidscore/blob/main/docs/SOURCES.md\n',encoding='utf-8')
  metadata['build']=hashlib.sha256((folder/'app/index.html').read_bytes()).hexdigest()[:16]
  (folder/'version.json').write_text(json.dumps(metadata,indent=2)+'\n',encoding='utf-8')
  files=[]

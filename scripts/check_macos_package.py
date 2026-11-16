@@ -4,7 +4,7 @@ import hashlib,json,re,stat,struct,zipfile
 
 ROOT=Path(__file__).resolve().parents[1];version=json.loads((ROOT/'package.json').read_text())['version']
 for arch,cpu in [('arm64',0x0100000c),('x64',0x01000007)]:
- name=f'Mahler-Lexicon-v{version}-macos-{arch}';archive=ROOT/'release'/(name+'.zip')
+ name=f'LucidScore-v{version}-macos-{arch}';archive=ROOT/'release'/(name+'.zip')
  h=hashlib.sha256()
  with archive.open('rb') as stream:
   for data in iter(lambda:stream.read(1024*1024),b''):h.update(data)

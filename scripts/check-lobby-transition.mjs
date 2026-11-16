@@ -1,0 +1,30 @@
+import {chromium,expect} from '@playwright/test';
+import {spawn} from 'node:child_process';
+import {mkdir} from 'node:fs/promises';
+const server=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','5305','--strictPort'],{windowsHide:true,stdio:'ignore'});let browser;
+try{
+ await mkdir('tmp/v2',{recursive:true});await new Promise(r=>setTimeout(r,1000));browser=await chromium.launch({channel:'msedge',headless:true});
+ const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('http://127.0.0.1:5305');await page.waitForFunction(()=>document.querySelector('audio').readyState>=1);
+ const audio=page.locator('audio');await expect(audio).toHaveAttribute('src','/audio/movement-1-web.m4a');await expect(audio).toHaveJSProperty('paused',true);
+ await expect(page.locator('.stage-scene')).not.toBeVisible();await expect(page.locator('.stage-tools')).not.toBeVisible();await expect(page.getByRole('slider')).toHaveCount(0);await expect(page.getByRole('button',{name:'开始聆听',exact:true})).toBeVisible();
+ expect((await page.locator('.stage-scene').boundingBox()).height).toBeLessThan(.1);
+ await page.evaluate(()=>window.__audioBefore=document.querySelector('audio'));await page.screenshot({path:'tmp/v2/lobby-only.png'});
+ await page.getByRole('button',{name:'开始聆听',exact:true}).click();await expect(page.locator('html')).toHaveAttribute('data-view-transition','active');
+ await page.waitForTimeout(150);
+ const animated=await page.evaluate(()=>document.getAnimations().filter(a=>a.effect?.pseudoElement?.startsWith('::view-transition')).map(a=>({pseudo:a.effect.pseudoElement,transforms:a.effect.getKeyframes().map(k=>k.transform),state:a.playState,progress:a.effect.getComputedTiming().progress,duration:a.effect.getTiming().duration})));
+ expect(animated.some(a=>a.state==='running'&&a.progress>0&&a.progress<1&&a.duration>=600)).toBe(true);
+ const rootFrames=animated.filter(a=>/^::view-transition-(old|new)\(root\)$/.test(a.pseudo));expect(rootFrames.length).toBeGreaterThan(0);
+ expect(rootFrames.every(a=>a.transforms.every(t=>!t||t==='none'))).toBe(true);
+ expect(await page.locator('html').evaluate(el=>getComputedStyle(el).backgroundColor)).not.toBe('rgb(245, 246, 243)');
+ await page.screenshot({path:'tmp/v2/lobby-stage-intermediate.png'});
+ await page.waitForFunction(()=>!document.documentElement.dataset.viewTransition);await expect(page.locator('main')).toHaveAttribute('data-view-mode','stage');await expect(page.locator('.stage-scene')).toBeVisible();await expect(audio).toHaveJSProperty('paused',false);expect(await audio.evaluate(a=>a.currentTime)).toBeGreaterThan(.2);
+ expect(await page.evaluate(()=>document.querySelector('audio')===window.__audioBefore)).toBe(true);await page.screenshot({path:'tmp/v2/stage-first-movement.png'});
+ const time=await audio.evaluate(a=>a.currentTime);await page.getByRole('button',{name:'展开作品导览'}).click();await page.waitForFunction(()=>!document.documentElement.dataset.viewTransition);await expect(page.locator('.stage-scene')).not.toBeVisible();await expect(audio).toHaveJSProperty('paused',false);expect(await audio.evaluate(a=>a.currentTime)).toBeGreaterThan(time);
+ await page.getByRole('button',{name:'返回舞台',exact:true}).click();await expect(page.locator('main')).toHaveAttribute('data-view-mode','stage');
+ await page.getByRole('button',{name:'展开作品导览'}).click();await page.locator('nav button').nth(1).click();await page.waitForFunction(()=>!document.documentElement.dataset.viewTransition);await expect(page.locator('main')).toHaveAttribute('data-view-mode','stage');await expect(audio).toHaveAttribute('src','/audio/movement-2-web.m4a');await expect(audio).toHaveCount(1);
+ const fallback=await browser.newPage({viewport:{width:390,height:844}});fallback.on('pageerror',e=>errors.push(e.message));await fallback.addInitScript(()=>Object.defineProperty(Document.prototype,'startViewTransition',{configurable:true,value:undefined}));await fallback.goto('http://127.0.0.1:5305');
+ await fallback.locator('nav button').first().click();await fallback.waitForTimeout(250);const partial=await fallback.locator('.stage-scene').evaluate(el=>Number(getComputedStyle(el).opacity));expect(partial).toBeGreaterThan(0);expect(partial).toBeLessThan(1);await expect(fallback.locator('.stage-scene')).toHaveCSS('opacity','1');expect(await fallback.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await fallback.close();
+ const reduced=await browser.newPage({viewport:{width:320,height:844},reducedMotion:'reduce'});await reduced.goto('http://127.0.0.1:5305');await expect(reduced.locator('.stage-scene')).not.toBeVisible();await reduced.locator('nav button').first().click();await expect(reduced.locator('.stage-scene')).toHaveCSS('opacity','1');expect(await reduced.locator('html').getAttribute('data-view-transition')).toBe(null);expect(await reduced.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await reduced.close();
+ expect(errors).toEqual([]);console.log('PASS lobby-only landing, movement I default, real 700ms intermediate frames, first playback, audio continuity, interrupted transitions, CSS fallback and reduced-motion 320/390px');
+}finally{await browser?.close();server.kill()}
