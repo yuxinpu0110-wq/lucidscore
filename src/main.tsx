@@ -1,3 +1,5 @@
+import {UiIcon} from './UiIcon';
+import {PlayIcon} from './PlayerIcons';
 import {mediaUrl} from './mediaUrl';
 import {IntroPrologue,hasSeenPrologue} from './IntroPrologue';
 import {flushSync} from 'react-dom';
@@ -23,6 +25,13 @@ import './tokens.css';
 import './webui.css';
 import './stage.css';
 import './mobile.css';
+import './tour.css';
+import './performance.css';
+import './playerTheme.css';
+import './highlightsLocal.css';
+import './theatre.css';
+import './morphing.css';
+import './icons.css';
 import { MovementSwitcher } from './MovementSwitcher';
 import { Segmented } from './Segmented';
 import { listeningLayers, type ListeningLayer } from './ListeningLayers';
@@ -42,7 +51,6 @@ import { validateContinuous, continuousCatalog, continuousSync, continuousMeasur
 import { validateGuides, guideAt, type GuideData } from './guideContent';
 import { measureAt, measureIntervals } from './measureSyncModel';
 import { Resources } from './Resources';
-import { fingerprint } from './localFiles';
 import rawDrafts from '../content/real/alignment-drafts.json';
 import { validateDrafts, draftEvents } from './alignmentDrafts';
 import rawScoreEvidence from '../content/real/score-observations.json';
@@ -57,6 +65,8 @@ import { validateMeasures, validateMeasureResearch } from './measureSyncModel';
 import { normalizeWorkLocation } from './workRoute';
 import {upgradeStorage} from './storageUpgrade';
 import {readListeningQuery,listeningURL,type ListeningQuery} from './listeningQuery';
+import {useCuratedTour} from './useCuratedTour';
+import {TourBar} from './TourBar';
 upgradeStorage();
 normalizeWorkLocation();
 window.addEventListener('popstate', normalizeWorkLocation);
@@ -76,8 +86,11 @@ const fmt = (n: number) => `${Math.floor(n / 60)}:${String(Math.floor(n % 60)).p
 const profilePlayback=new URLSearchParams(location.search).has('profilePlayback');
 const guideCounts=Object.fromEntries(Object.entries(authorGuideLibrary).map(([m,g])=>[m,g.guides.length]));
 const initialQuery=readListeningQuery(location.search,guideCounts);
+const tourEnabled=true;
+const initialTour=tourEnabled&&new URLSearchParams(location.search).get('tour')==='highlights';
 function App() {
-    const [introOpen,IntroOpen]=useState(()=>!hasSeenPrologue());
+    const [introOpen,IntroOpen]=useState(()=>!initialTour&&!hasSeenPrologue());
+    const pendingFullPlay=useRef(false);
     const prologuePlay=useRef<()=>void>(()=>{});
     const [mobileLayout,SetMobileLayout]=useState(()=>matchMedia('(max-width:768px)').matches);
     useEffect(()=>{const query=matchMedia('(max-width:768px)'),changed=()=>SetMobileLayout(query.matches);query.addEventListener('change',changed);return()=>query.removeEventListener('change',changed)},[]);
@@ -89,7 +102,7 @@ function App() {
     const tickRef=useRef<()=>void>(()=>{});
     const [lyricLanguage,LyricLanguage]=useState('de-zh');
     const {viewMode,enterStage,returnToLobby}=useStageView(initialQuery.hasSelection?'stage':'lobby');
-    const pendingLink=useRef<ListeningQuery|null>(initialQuery.hasSelection?initialQuery:null);
+    const pendingLink=useRef<ListeningQuery|null>(initialQuery.hasSelection&&!initialTour?initialQuery:null);
     const [linkRevision,LinkRevision]=useState(0);
     const linkHandler=useRef<(q:ListeningQuery)=>void>(()=>{});
     const [kind, setKind] = useState<'demo' | 'real'>(real.tracks.length ? 'real' : 'demo');
@@ -109,7 +122,7 @@ function App() {
     ]>([0, 8]), [loop, L] = useState(false), [tab, Tab] = useState<ListeningLayer>(initialQuery.tab), [pageBrowse, PageBrowse] = useState<string | null>(null), [barBrowse, BarBrowse] = useState<number | null>(initialQuery.hasSelection?authorGuideLibrary[initialQuery.movement].guides[initialQuery.section-1].from:null), [hidden, H] = useState(false), [history, Hist] = useState<string[]>([]), [stack, Stack] = useState<Context[]>([]), [error, Err] = useState(''), [bindings, B] = useState<Record<number, {
         url: string;
         id: string;
-    }>>({}), [continuous, C] = useState(false), [importing, Importing] = useState(false), [loadedMedia, Loaded] = useState<{
+    }>>({}), [continuous, C] = useState(false), [loadedMedia, Loaded] = useState<{
         url: string;
         duration: number;
     } | null>(null);
@@ -121,8 +134,6 @@ function App() {
         start: number;
         end: number;
     } | null>(null);
-    const importToken = useRef(0);
-    const objectURLs = useRef(new Set<string>());
     const audio = useRef<HTMLAudioElement>(null);
     const reactive = useRef<AudioReactiveEngine | null>(null);
     const visualState = useRef<() => VisualState>(() => ({ movement: 0, playing: false, bar: null }));
@@ -140,14 +151,13 @@ function App() {
     } | null>(null);
     const defaultGuides = defaultGuideLibrary[movement];
     const guides = guideOverrides[movement] || defaultGuides;
-    const totalGuides = Object.values({ ...defaultGuideLibrary, ...guideOverrides }).reduce((n, d) => n + d.guides.length, 0);
     const [failedDelivery, FailedDelivery] = useState<Set<string>>(() => new Set());
     const binding = bindings[movement];
     const movementTracks = data.tracks.filter(t => t.movement === movement);
     const track = (binding ? movementTracks.find(t => t.fingerprint === binding.id) : movementTracks.find(t => t.id === trackChoice)) || movementTracks[0];
     const delivery = !binding && kind === 'real' && track && !failedDelivery.has(track.id) ? webAudio.tracks.find(t => t.trackId === track.id && t.sourceFingerprint === track.fingerprint) : undefined;
     const requestedTransport=new URLSearchParams(location.search).get('audio');
-    const pagesProduction=import.meta.env.PROD&&import.meta.env.MODE!=='local';
+    const pagesProduction=import.meta.env.PROD&&import.meta.env.MODE!=='portable';
     const hlsRequested=pagesProduction||requestedTransport==='hls'||(requestedTransport!=='progressive'&&!['localhost','127.0.0.1','[::1]'].includes(location.hostname));
     const deliveryURL=(id:string)=>{const item=webAudio.tracks.find(t=>t.trackId===id);return (hlsRequested?item?.hls?.url:undefined)||item?.url};
     const url = binding?.url || (hlsRequested?delivery?.hls?.url:undefined) || delivery?.url || track?.url || '';
@@ -184,31 +194,8 @@ function App() {
     useEffect(() => { if (cue && !(kind === 'real' && canSeekGuides))
         Hist(h => h.includes(cue.id) ? h : [...h, cue.id]); }, [cue?.id, kind, canSeekGuides]);
     useEffect(() => { const a = audio.current!; generation.current++; a.pause(); stopAt.current = null; act('ended'); transport.current!.load(url,!pagesProduction||delivery&&delivery.bytes<24000000?delivery?.url:undefined); BarBrowse(null); PageBrowse(null); T(0); D(track?.duration || 0); L(false); Err(''); }, [url]);
-    useEffect(() => () => { importToken.current++; objectURLs.current.forEach(url => URL.revokeObjectURL(url)); }, []);
-    async function importAudio(file: File) { const token = ++importToken.current; const target = movement; pause(); Importing(true); Err(''); try {
-        const id = await fingerprint(file);
-        if (token !== importToken.current)
-            return;
-        const url = URL.createObjectURL(file);
-        objectURLs.current.add(url);
-        B(b => { const old = b[target]; if (old) {
-            URL.revokeObjectURL(old.url);
-            objectURLs.current.delete(old.url);
-        } return { ...b, [target]: { url, id } }; });
-        S('');
-        Stack([]);
-        Hist([]);
-    }
-    catch {
-        if (token === importToken.current)
-            Err('本地文件读取失败，请重新导入。');
-    }
-    finally {
-        if (token === importToken.current)
-            Importing(false);
-    } }
     async function play(keepPanel = false) { enterStage(); pendingBarSeek.current = null; auditionMode.current = keepPanel; if (!url) {
-        Err('此乐章缺少音频，请导入本地文件。');
+        Err('此乐章的录音暂不可用。');
         return;
     } const g = ++generation.current; if (audio.current!.error) {
         pendingRestore.current = { context: context(), resume: true, url };
@@ -236,7 +223,7 @@ function App() {
         }
         if (url) {
             act('error');
-            Err('音频暂时无法播放，请检查网络后点击播放重试，或绑定本地录音。');
+            Err('音频暂时无法播放，请检查网络后点击播放重试。');
         }
     }
     function pause() { pendingBarSeek.current = null; pendingRestore.current = null; auditionMode.current = false; continueNext.current = false; stopAt.current = null; generation.current++; audio.current!.pause(); T(audio.current!.currentTime); act('pause'); }
@@ -252,15 +239,15 @@ function App() {
         act('pause'); }
     function back(resume: boolean) { const c = stack.at(-1); if (!c)
         return; pause(); auditionOrigin.current = null; const target = data.tracks.find(t => t.id === c.trackId && t.fingerprint === c.binding); const bound = bindings[c.movement]; const targetURL = bound?.id === c.binding ? bound.url : (target && !failedDelivery.has(target.id) ? deliveryURL(target.id) : undefined) || target?.url; if (!targetURL) {
-        Err('原音轨已变更或缺失，请重新绑定对应文件。');
+        Err('原录音已变更或缺失，暂时无法返回。');
         return;
     } Stack(s => s.slice(0, -1)); if (bound && bound.id !== c.binding)
         B(b => { const next = { ...b }; delete next[c.movement]; return next; }); M(c.movement); SelectTrack(c.trackId || ''); if (targetURL === url)
         applyContext(c, resume);
     else
         pendingRestore.current = { context: c, resume, url: targetURL }; }
-    function changeMovement(n: number) { enterStage(); BarBrowse(null); SelectTrack(''); importToken.current++; Importing(false); pause(); state.current = { ...state.current, panel: false }; act('ended'); M(n); S(''); L(false); Stack([]); T(0); audio.current!.currentTime = 0; }
-    function replay(start: number, end: number, repeat = false) { if (!validReplay([start, end], duration))
+    function changeMovement(n: number) { tour.exit(); enterStage(); BarBrowse(null); SelectTrack(''); pause(); state.current = { ...state.current, panel: false }; act('ended'); M(n); S(''); L(false); Stack([]); T(0); audio.current!.currentTime = 0; }
+    function replay(start: number, end: number, repeat = false) { tour.exit(); if (!validReplay([start, end], duration))
         return; if (!auditionOrigin.current) {
         auditionOrigin.current = context();
         Stack(s => [...s, context()].slice(-12));
@@ -273,18 +260,21 @@ function App() {
     function barRange(from: number, to = from, requireLoaded = true) {
         if (kind !== 'real' || !track || (requireLoaded && !canSeekGuides) || !Number.isInteger(from) || !Number.isInteger(to) || from < 1 || to < from)
             return null;
-        if (movement !== 3)
-            return workBarRange(workMeasures[movement], track!.id, binding?.id || track!.fingerprint, from, to);
+        return mappedBarRange(movement, track.id, binding?.id || track.fingerprint, from, to);
+    }
+    function mappedBarRange(chapter:number,trackId:string,fingerprint:string,from:number,to:number) {
+        if (chapter !== 3)
+            return workBarRange(workMeasures[chapter], trackId, fingerprint, from, to);
         const first = measureData.measures[from - 1], last = measureData.measures[to - 1];
         if (!first || !last)
             return null;
-        const start = measureIntervals(measureData, first.id).find(i => i.trackId === track!.id && i.fingerprint === (binding?.id || track!.fingerprint));
-        const end = measureIntervals(measureData, last.id).find(i => i.trackId === track!.id && i.fingerprint === (binding?.id || track!.fingerprint));
+        const start = measureIntervals(measureData, first.id).find(i => i.trackId === trackId && i.fingerprint === fingerprint);
+        const end = measureIntervals(measureData, last.id).find(i => i.trackId === trackId && i.fingerprint === fingerprint);
         return start && end ? { trackId: start.trackId, start: start.start, end: end.end, regionId: first.regionId } : null;
     }
     function browseGuide(number: number) { Stack(s => [...s, context()].slice(-12)); seekToBar(number); }
-    function seekToBar(number: number) { navigateReference(number, number); }
-    function navigateReference(from: number, to: number) {
+    function seekToBar(number: number) { tour.exit(); navigateReference(number, number); }
+    function navigateReference(from: number, to: number) { tour.exit();
         const target = barRange(from, to, false);
         BarBrowse(from);
         PageBrowse(null);
@@ -308,7 +298,41 @@ function App() {
         Err('');
         locateScore(target.trackId, target.start, target.end);
     }
-    function followReference(from: number, to?: number) { Stack(s => [...s, context()].slice(-12)); navigateReference(from, to ?? from); }
+    function followReference(from:number,to=from,chapter=movement) {
+        const origin=context();
+        if(chapter===movement){
+            Stack(s=>[...s,origin].slice(-12));
+            navigateReference(from,to);
+            return;
+        }
+        const bound=bindings[chapter];
+        const destination=data.tracks.filter(t=>t.movement===chapter && (!bound||t.fingerprint===bound.id))
+            .map(track=>({track,range:mappedBarRange(chapter,track.id,track.fingerprint,from,to)}))
+            .find(candidate=>!!candidate.range);
+        const targetURL=destination&&(bound?.url||(!failedDelivery.has(destination.track.id)?deliveryURL(destination.track.id):undefined)||destination.track.url);
+        if(!destination?.range||!targetURL){
+            Err('目标乐章没有匹配的小节定位，请检查录音版本。');
+            return;
+        }
+        tour.exit();
+        pause();
+        Stack(s=>[...s,origin].slice(-12));
+        auditionOrigin.current=null;
+        SelectTrack(destination.track.id);
+        S('');
+        L(false);
+        M(chapter);
+        BarBrowse(from);
+        PageBrowse(null);
+        if(targetURL===url && loadedMedia?.url===url && Math.abs(loadedMedia.duration-destination.track.duration)<.5){
+            seek(destination.range.start);
+            R([destination.range.start,destination.range.end]);
+            Err('');
+            return;
+        }
+        pendingBarSeek.current={movement:chapter,url:targetURL,from,to,start:destination.range.start,end:destination.range.end};
+        Err('正在载入目标乐章，完成后会定位到所选小节。');
+    }
     function tick() { const a = audio.current!; if (state.current.dragging)
         return; if (!loop && stopAt.current !== null && a.currentTime >= stopAt.current) {
         a.pause();
@@ -322,8 +346,36 @@ function App() {
     function drop() { if (!state.current.dragging)
         return; act('drop'); if (state.current.resume)
         void play(); }
+    useEffect(()=>{if(pendingFullPlay.current&&movement===1&&canSeekGuides){pendingFullPlay.current=false;seek(0);void play()}},[movement,canSeekGuides]);
     const currentBar = canSeekGuides ? (movement === 3 ? measureAt(measureData, track!.id, navigationFingerprint, time) : workMeasureAt(workMeasures[movement], track!.id, navigationFingerprint, time))?.measure.number || null : null;
     const displayedBar = barBrowse || currentBar || guides.guides[0]?.from || null;
+    const tour=useCuratedTour({enabled:tourEnabled,audio,movement,source:url,ready:canSeekGuides,
+        select:stop=>{pendingLink.current=null;pause();B(previous=>{const next={...previous};delete next[stop.movementId];return next});setKind('real');SelectTrack('');S('');L(false);Stack([]);C(false);M(stop.movementId);Mode('启发探索');BarBrowse(null);PageBrowse(null);enterStage();IntroOpen(false)},
+        gain:(value,base)=>{if(reactive.current?.hasGain()){if(audio.current)audio.current.volume=base;reactive.current.fadeTo(value,.05)}else if(audio.current)audio.current.volume=value*base},
+        playing:()=>{void reactive.current?.connectAudio(audio.current!);act('play')},paused:()=>act('ended')});
+    function listenToFullMovement(){
+        const root=document.documentElement;
+        if(root.hasAttribute('data-tour-transition'))return;
+        const commit=()=>flushSync(()=>{
+            tour.exit();
+            Mode('自由检索');
+        });
+        if(matchMedia('(prefers-reduced-motion: reduce)').matches){commit();return}
+        if(document.startViewTransition){
+            root.setAttribute('data-tour-transition','');
+            try{
+                const transition=document.startViewTransition(commit);
+                void transition.ready.catch(()=>{});
+                void transition.finished.catch(()=>{}).then(()=>root.removeAttribute('data-tour-transition'));
+                return;
+            }catch{root.removeAttribute('data-tour-transition')}
+        }
+        commit();
+        document.querySelectorAll('.floating-player-dock,.guide-panel,.movement-area').forEach(element=>
+            element.animate([{opacity:.35},{opacity:1}],{duration:260,easing:'ease-out'})
+        );
+    }
+    useEffect(()=>{if(initialTour)tour.start(Math.max(1,Math.min(6,Number(new URLSearchParams(location.search).get('step'))||1)))},[]);
     const guideBar=mode==='启发探索'&&ui.playing&&canSeekGuides?currentBar:displayedBar;
     const activeGuide=guideBar?guideAt(guides,measureResearch,guideBar):undefined;
     const activeSection=Math.max(1,guides.guides.findIndex(g=>g.id===activeGuide?.id)+1);
@@ -342,7 +394,7 @@ function App() {
         navigateReference(guide.from,guide.from);
     },[movement,linkRevision,guides]);
     useEffect(()=>{
-        const pop=()=>linkHandler.current(readListeningQuery(location.search,guideCounts));
+        const pop=()=>{if(new URLSearchParams(location.search).get('tour')==='highlights'){tour.start(Number(new URLSearchParams(location.search).get('step'))||1)}else{tour.exit();linkHandler.current(readListeningQuery(location.search,guideCounts))}};
         window.addEventListener('popstate',pop);return()=>window.removeEventListener('popstate',pop);
     },[]);
     useEffect(()=>{
@@ -372,7 +424,7 @@ function App() {
         const g = guides.guides.find(x => x.id === id.slice(historyPrefix.length));
         return g && <button key={id} onClick={() => browseGuide(g.from)}>{g.prompt}（第 {g.from} 小节）</button>;
     } const c = allCues.find(c => c.id === id); return c && <button key={id} onClick={() => choose(c.event)}>{c.text}（{eventStatus(c.event)}）</button>; })}</details></>}</div></div>);
-    return <>{introOpen&&<IntroPrologue onEnter={enterFromPrologue} onSkip={()=>{IntroOpen(false);if(initialQuery.hasSelection)enterStage();else returnToLobby()}}/>}<main inert={introOpen} id="main-content" data-view-mode={viewMode} data-concert={concert} data-movement={movement} data-phase={phase} data-event={visualEvent} data-score-mode={scoreMode}><a className="skip-link" href="#listening-content">跳到谱面与导读</a>{viewMode==='lobby'&&!introOpen&&<button className="lobby-return-prologue" onClick={()=>{pause();IntroOpen(true)}}>返回序幕</button>}<ListeningAtmosphere movement={movement} phase={phase} visualEvent={visualEvent}/><header className="site-header"><button className="brand work-home" aria-label="展开作品导览" onClick={returnToLobby}><span className="brand-mark" aria-hidden="true">L.</span><span>LucidScore<small>Interactive Score &amp; Listening Guide</small></span></button><span className="header-note">C-MOLL · AUFERSTEHUNGSSYMPHONIE (1888–1894)</span><ReviewDrawer><button className="replay-prologue" onClick={e=>{e.currentTarget.closest('dialog')?.close();pause();IntroOpen(true)}}>重看序幕</button>{mobileLayout&&<div className="mobile-settings">{continuousSettings}{recordingSettings}</div>}<label className="library">内容库 <select aria-label="内容库" value={kind} onChange={e => { importToken.current++; Importing(false); pause(); setKind(e.target.value as 'demo' | 'real'); BarBrowse(null); Drafts(false); SelectTrack(''); S(''); Stack([]); Hist([]); }}><option value="demo">交互演示</option><option value="real">正式内容（待补充）</option></select></label><p className="notice">{kind === 'demo' ? '交互演示：合成音频、虚构谱例与时间；不是马勒原作。' : `已审阅片段 ${data.events.length} / 目标 10–15；已编辑提示 ${data.cues.length} / 目标 6–10；五乐章共 ${totalGuides} 段导读，当前乐章 ${guides.guides.length} 段。`}</p>{kind === 'real' && remainingDrafts.length > 0 && <div className="draft-entry"><div><strong>{showDrafts ? '核对视图 · 对齐草稿待回听' : `${remainingDrafts.length} 条真实录音对齐草稿可试听`}</strong><p>第三乐章开头 · 原谱、实际波形与两次短音型比较；不计入已核验覆盖。</p></div><button onClick={() => { if (showDrafts) {
+    return <>{introOpen&&<IntroPrologue onTour={tourEnabled?()=>{IntroOpen(false);tour.start()}:undefined} onEnter={enterFromPrologue} onSkip={()=>{IntroOpen(false);if(initialQuery.hasSelection)enterStage();else returnToLobby()}}/>}<main inert={introOpen} id="main-content" data-view-mode={viewMode} data-concert={concert} data-tour={!!tour.stop} data-movement={movement} data-phase={phase} data-event={visualEvent} data-score-mode={scoreMode}><a className="skip-link" href="#listening-content">跳到谱面与导读</a>{viewMode==='lobby'&&!introOpen&&<button className="lobby-return-prologue" onClick={()=>{pause();IntroOpen(true)}}>返回序幕</button>}<ListeningAtmosphere movement={movement} phase={phase} visualEvent={visualEvent}/><header className="site-header"><button className="brand work-home" aria-label="展开作品导览" onClick={returnToLobby}><img className="brand-logo" src="/logo-512.webp" width="24" height="24" alt=""/><span>LucidScore<small>INTERACTIVE SCORE GUIDE</small></span></button><span className="header-note">C-MOLL · AUFERSTEHUNGSSYMPHONIE (1888–1894)</span><ReviewDrawer>{tourEnabled&&<button onClick={e=>{e.currentTarget.closest('dialog')?.close();tour.start()}}>进入精华导听</button>}<button className="replay-prologue" onClick={e=>{e.currentTarget.closest('dialog')?.close();pause();IntroOpen(true)}}>重看序幕</button>{mobileLayout&&<div className="mobile-settings">{continuousSettings}{recordingSettings}</div>}{kind === 'real' && remainingDrafts.length > 0 && <div className="draft-entry"><div><strong>{showDrafts ? '核对视图 · 对齐草稿待回听' : `${remainingDrafts.length} 条真实录音对齐草稿可试听`}</strong><p>第三乐章开头 · 原谱、实际波形与两次短音型比较；不计入已核验覆盖。</p></div><button onClick={() => { if (showDrafts) {
         pause();
         Drafts(false);
         S('');
@@ -384,8 +436,7 @@ function App() {
         SelectTrack(draftData.trackId);
         Drafts(true);
         act('pause');
-    } }}>{showDrafts ? '退出对齐核对' : '进入对齐核对'}</button></div>}<label className="import liquid-glass-pill"><span aria-hidden="true">＋</span> 绑定本乐章本地音频 <input type="file" accept="audio/*" onChange={e => { const f = e.target.files?.[0]; if (f)
-        void importAudio(f); e.target.value = ''; }}/></label><p className="muted">{kind === 'real' && real.tracks.length > 0 && !binding ? '已内置项目录音，可直接聆听；网页使用节省流量的播放版本。' : '文件只在浏览器使用；刷新后须重新绑定，指纹一致才恢复对应注释。'}</p>{importing && <p role="status">正在本地核对文件指纹…</p>}{binding && <div className="binding-status">{events.length ? `文件匹配 · ${events.length} 条可定位注释` : '未匹配已核验音轨，仅无注释聆听'}<details><summary>文件核对信息</summary><code>{binding.id}</code><p>指纹只识别同一文件，不证明演奏者身份；目标录音为伯恩斯坦 1987／DG，仍需对照发行资料。</p></details></div>}{kind === 'real' && <details className="development-tools"><summary>开发工具 · 小节定位与整章核对</summary><p>用于内容校对：小节定位、完整谱页与本地导读编辑。常规聆听使用舞台中的总谱与导读。</p>{import.meta.env.DEV && <ContentImport key={movement} data={guides} reference={defaultGuides} measures={measureData} research={measureResearch} onApply={next => SetGuideOverrides(previous => ({ ...previous, [next.movement]: next }))} onReset={() => SetGuideOverrides(previous => { const next = { ...previous }; delete next[movement]; return next; })}/>}{movement === 3 && <ScoreSync data={syncData} measures={measureData} research={measureResearch} trackId={track?.id || ''} fingerprint={binding?.id || track?.fingerprint || ''} time={time} onLocate={locateScore} onReplay={replay}/>}</details>}<Resources movement={movement} fingerprint={binding?.id || track?.fingerprint} duration={duration} range={range} demo={kind === 'demo'}/><p className="review-scope">正式内容仍在核验，演示材料不计入覆盖；谱面与时间定位精度见总谱控制栏中的说明。</p></ReviewDrawer></header><section className="intro lobby-hero-section" inert={viewMode === 'stage'} aria-hidden={viewMode === 'stage'}><p className="eyebrow">GUSTAV MAHLER · SYMPHONIE NR. 2</p><h1>第二交响曲<span>「复活」</span></h1><p className="work-dates">1888 — 1894</p><button className="lobby-start" onClick={()=>ui.playing?enterStage():void play()}>{ui.playing?'返回舞台':'开始聆听'}<span aria-hidden="true"> ↗</span></button></section><MovementSwitcher compact={viewMode === 'stage'} controls={<><div className="modes"><Segmented label="聆听模式" options={["自由检索", "启发探索"]} value={mode} onChange={m => Mode(m as Mode)}/>{!mobileLayout&&continuousSettings}</div>{!mobileLayout&&recordingSettings}</>} movement={movement} names={names} onChange={changeMovement} descriptions={names.map((_, i) => kind === 'demo' && i === 2 ? '3 条演示 · 60 秒' : `${kind === 'real' ? (guideOverrides[i + 1] || defaultGuideLibrary[i + 1]).guides.length : 0} 段导读 · ` + (bindings[i + 1] || data.tracks.some(t => t.movement === i + 1 && t.url) ? '可播放' : '资源缺失'))}/><div className="stage-scene" inert={viewMode==='lobby'} aria-hidden={viewMode==='lobby'}><div className="stage-scene-content"><section className="player" aria-label="音乐播放器"><audio crossOrigin="anonymous" preload="metadata" ref={audio} onLoadedMetadata={() => { const actual = audio.current!.duration; D(delivery && track ? track.duration : actual); Loaded({ url, duration: actual }); const pendingBar = pendingBarSeek.current; if (pendingBar && pendingBar.url === url && pendingBar.movement === movement) {
+    } }}>{showDrafts ? '退出对齐核对' : '进入对齐核对'}</button></div>}{kind === 'real' && <details className="development-tools"><summary>开发工具 · 小节定位与整章核对</summary><p>用于内容校对：小节定位、完整谱页与本地导读编辑。常规聆听使用舞台中的总谱与导读。</p>{import.meta.env.DEV && <ContentImport key={movement} data={guides} reference={defaultGuides} measures={measureData} research={measureResearch} onApply={next => SetGuideOverrides(previous => ({ ...previous, [next.movement]: next }))} onReset={() => SetGuideOverrides(previous => { const next = { ...previous }; delete next[movement]; return next; })}/>}{movement === 3 && <ScoreSync data={syncData} measures={measureData} research={measureResearch} trackId={track?.id || ''} fingerprint={binding?.id || track?.fingerprint || ''} time={time} onLocate={locateScore} onReplay={replay}/>}</details>}<Resources movement={movement} fingerprint={binding?.id || track?.fingerprint} duration={duration} range={range} demo={kind === 'demo'}/><p className="review-scope">正式内容仍在核验，演示材料不计入覆盖；谱面与时间定位精度见总谱控制栏中的说明。</p></ReviewDrawer></header><section className="intro lobby-hero-section" inert={viewMode === 'stage'} aria-hidden={viewMode === 'stage'}><p className="eyebrow">GUSTAV MAHLER · SYMPHONIE NR. 2</p><h1>第二交响曲<span>「复活」</span></h1><p className="work-dates">1888 — 1894</p><div className="lobby-actions"><button className="lobby-start" onClick={()=>ui.playing?enterStage():void play()}>{ui.playing?'返回舞台':'开始聆听'}<span aria-hidden="true"><UiIcon name="external"/></span></button>{tourEnabled&&<button className="tour-lobby-shortcut" onClick={()=>tour.start()}>精华导听 <span>6 个瞬间 <UiIcon name="external"/></span></button>}</div></section>{tour.stop?<TourBar tour={tour} onListenFull={listenToFullMovement} audio={audio} playing={ui.playing} onToggle={()=>ui.playing?pause():void play()} onDrag={()=>{act('drag');generation.current++;audio.current!.pause()}} onSeek={seek} onDrop={drop}/>:<MovementSwitcher compact={viewMode === 'stage'} controls={<><div className="modes"><button className="compact-mode-toggle" aria-label="切换聆听模式" onClick={()=>Mode(mode==='自由检索'?'启发探索':'自由检索')}>{mode} <UiIcon name="switch"/></button>{!mobileLayout&&continuousSettings}</div>{!mobileLayout&&recordingSettings}</>} movement={movement} names={names} onChange={changeMovement} descriptions={names.map((_, i) => kind === 'demo' && i === 2 ? '3 条演示 · 60 秒' : `${kind === 'real' ? (guideOverrides[i + 1] || defaultGuideLibrary[i + 1]).guides.length : 0} 段导读 · ` + (bindings[i + 1] || data.tracks.some(t => t.movement === i + 1 && t.url) ? '可播放' : '资源缺失'))}/>}<div className="stage-scene" inert={viewMode==='lobby'} aria-hidden={viewMode==='lobby'}><div className="stage-scene-content"><section className="player" aria-label="音乐播放器"><audio crossOrigin="anonymous" preload="auto" ref={audio} onLoadedMetadata={() => { const actual = audio.current!.duration; D(delivery && track ? track.duration : actual); Loaded({ url, duration: actual }); const pendingBar = pendingBarSeek.current; if (pendingBar && pendingBar.url === url && pendingBar.movement === movement) {
         pendingBarSeek.current = null;
         if (track && Math.abs(actual - track.duration) < .5 && barRange(pendingBar.from, pendingBar.to, false)) {
             audio.current!.currentTime = pendingBar.start;
@@ -424,17 +475,17 @@ function App() {
         }
         else if (movement < 5)
             Err('下一乐章资源缺失');
-    } }}/><div className="stage-controls floating-player-dock"><PlaybackProgress chapters={guides.guides.map(g=>barRange(g.from,g.to,false)?.start).filter((t):t is number=>t!==undefined)} audio={audio} duration={duration} disabled={!url} onDrag={()=>{act('drag');generation.current++;audio.current!.pause()}} onSeek={seek} onDrop={drop}><button className="primary" data-playing={ui.playing} disabled={importing} onClick={() => ui.playing ? pause() : void play()}><svg className="mobile-play-svg" viewBox="0 0 24 24" aria-hidden="true"><path d={ui.playing?"M6 4h4v16H6zm8 0h4v16h-4z":"M7 3v18l15-9z"}/></svg>{ui.playing ? '暂停并探索' : '播放'}</button></PlaybackProgress><PlaybackBuffer audio={audio} url={url}/></div>{event && <p>所选片段：{fmt(event.start)}–{fmt(event.end)} · {event.title}（{eventStatus(event.id)}）</p>}{error && <p role="alert" className="notice">{error}</p>}{!url && <p className="notice">此乐章资源缺失，可导入本地音频无注释聆听。</p>}{(kind === 'demo' || !canSeekGuides) && listeningCue}</section>{stack.length > 0 && <aside>出发位置 {fmt(stack.at(-1)!.time)} · 第 {stack.at(-1)!.movement} 乐章 <span className="return-source">{data.tracks.find(t => t.id === stack.at(-1)!.trackId)?.label}</span><button onClick={() => back(false)}>仅返回</button><button onClick={() => back(true)}>返回原处继续</button></aside>}<section id="listening-content" className="explore" data-open={ui.panel}><div className="panel-content">{kind === 'real' && <><div className="listening-workspace"><div className="score-column">{movement !== 3 && <CurrentScorePages vocal={<LyricsPanel lyric={activeLyric} language={lyricLanguage} onLanguage={LyricLanguage}/>} key={movement + url} data={workSync[movement]} measures={workMeasures[movement]} selectedNumber={barBrowse} onBarSelect={n => { if (n === null) {
+    } }}/><div className="stage-controls floating-player-dock"><PlaybackProgress chapters={guides.guides.map(g=>barRange(g.from,g.to,false)?.start).filter((t):t is number=>t!==undefined)} audio={audio} duration={duration} disabled={!url} onDrag={()=>{act('drag');generation.current++;audio.current!.pause()}} onSeek={t=>{tour.manualSeek(t);seek(t)}} onDrop={drop}><button className="primary" data-playing={ui.playing} onClick={() => ui.playing ? pause() : void play()}><PlayIcon playing={ui.playing}/>{ui.playing ? '暂停并探索' : '播放'}</button></PlaybackProgress><PlaybackBuffer audio={audio} url={url}/></div>{event && <p>所选片段：{fmt(event.start)}–{fmt(event.end)} · {event.title}（{eventStatus(event.id)}）</p>}{error && <p role="alert" className="notice">{error}</p>}{!url && <p className="notice">此乐章资源缺失，可导入本地音频无注释聆听。</p>}{(kind === 'demo' || !canSeekGuides) && listeningCue}</section>{stack.length > 0 && <aside className="reference-return" aria-label="返回原处">出发位置 {fmt(stack.at(-1)!.time)} · 第 {stack.at(-1)!.movement} 乐章 <span className="return-source">{data.tracks.find(t => t.id === stack.at(-1)!.trackId)?.label}</span><button onClick={() => back(false)}>仅返回</button><button onClick={() => back(true)}>返回原处继续</button></aside>}<section id="listening-content" className="explore" data-open={ui.panel}><div className="panel-content">{kind === 'real' && <><div className="listening-workspace"><div className="score-column">{movement !== 3 && <CurrentScorePages vocal={<LyricsPanel lyric={activeLyric} language={lyricLanguage} onLanguage={LyricLanguage}/>} key={movement + url} data={workSync[movement]} measures={workMeasures[movement]} selectedNumber={barBrowse} onBarSelect={n => { if (n === null) {
         BarBrowse(null);
         PageBrowse(null);
     }
     else
-        browseGuide(n); }} selectedRegion={pageBrowse} onSelect={id => { BarBrowse(null); PageBrowse(id); }} trackId={track?.id || ''} fingerprint={navigationFingerprint} time={time} onLocate={locateScore} onReplay={replay}/>} {movement === 3 && <CurrentScore vocal={<LyricsPanel lyric={activeLyric} language={lyricLanguage} onLanguage={LyricLanguage}/>} data={measureData} trackId={track?.id || ''} fingerprint={navigationFingerprint} time={time} selectedNumber={barBrowse} onSelect={n => n === null ? BarBrowse(null) : seekToBar(n)} onLocate={locateScore} onReplay={replay}/>}</div><GuidePanel onShare={()=>navigator.clipboard.writeText(listeningURL(location.href,{movement,section:activeSection,tab,mode}).href)} listeningCue={listeningCue} data={guides} research={measureResearch} bar={mode === '启发探索' && ui.playing && canSeekGuides ? currentBar : displayedBar} layer={tab} canSeek={canSeekGuides} isRangeMapped={(from, to) => !!barRange(from, to)} onRangeReplay={(from, to) => { const target = barRange(from, to); if (target) {
+        browseGuide(n); }} selectedRegion={pageBrowse} onSelect={id => { BarBrowse(null); PageBrowse(id); }} trackId={track?.id || ''} fingerprint={navigationFingerprint} time={time} onLocate={locateScore} onReplay={replay}/>} {movement === 3 && <CurrentScore vocal={<LyricsPanel lyric={activeLyric} language={lyricLanguage} onLanguage={LyricLanguage}/>} data={measureData} trackId={track?.id || ''} fingerprint={navigationFingerprint} time={time} selectedNumber={barBrowse} onSelect={n => n === null ? BarBrowse(null) : seekToBar(n)} onLocate={locateScore} onReplay={replay}/>}</div><GuidePanel tourActive={!!tour.stop} tourCue={tour.stop?<div className="tour-cue"><p>{tour.stop.bridgeNote}</p><strong>{tour.stop.listeningCue}</strong></div>:undefined} onShare={()=>navigator.clipboard.writeText(listeningURL(location.href,{movement,section:activeSection,tab,mode}).href)} listeningCue={listeningCue} data={guides} research={measureResearch} bar={mode === '启发探索' && ui.playing && canSeekGuides ? currentBar : displayedBar} layer={tab} canSeek={canSeekGuides} isRangeMapped={(from, to) => !!barRange(from, to)} onRangeReplay={(from, to) => { const target = barRange(from, to); if (target) {
         BarBrowse(from);
         replay(target.start, target.end);
     }
     else
-        followReference(from, to); }} showPrompt={mode === '启发探索'} promptOnly={mode === '启发探索' && ui.playing && canSeekGuides && !auditionMode.current} onExplore={() => { Stack(s => [...s, context()].slice(-12)); pause(); BarBrowse(currentBar); Tab('赏析'); }} onLayer={Tab} onBrowse={browseGuide} onReference={followReference}/></div></>}</div></section><footer><button onClick={()=>{pause();IntroOpen(true)}}>{'重看序幕'}</button><a href="https://github.com/yuxinpu0110-wq/lucidscore" target="_blank" rel="noreferrer">LucidScore · GitHub</a><span>© 2026 LucidScore</span><span>GUSTAV MAHLER · SYMPHONIE NR. 2</span><span>PARTITUR &amp; KOMMENTAR</span></footer></div></div></main></>;
+        followReference(from, to); }} showPrompt={mode === '启发探索'} promptOnly={!tour.stop && mode === '启发探索' && ui.playing && canSeekGuides && !auditionMode.current} onExplore={() => { Stack(s => [...s, context()].slice(-12)); pause(); BarBrowse(currentBar); Tab('赏析'); }} onLayer={Tab} onBrowse={browseGuide} onReference={followReference}/></div></>}</div></section>{tour.notice&&<p className="tour-notice" role="status">{tour.notice}</p>}{tour.status==='finished'&&<div className="tour-finish" role="dialog" aria-modal="true" aria-label="精华导听完成"><h2>你已走完六个决定性瞬间</h2><p>从墓地里的第一声叩问，到星空下的无伴奏合唱——完整版 85 分钟的每一个细节，随时为你敞开。</p><button autoFocus onClick={()=>{tour.exit();pause()}}>自由探索五乐章</button><button onClick={()=>{tour.exit();changeMovement(1);pendingFullPlay.current=true}}>从第一乐章完整开始</button></div>}<footer><button onClick={()=>{pause();IntroOpen(true)}}>{'重看序幕'}</button><a href="https://github.com/yuxinpu0110-wq/lucidscore" target="_blank" rel="noreferrer">LucidScore · GitHub</a><span>© 2026 LucidScore</span><span>GUSTAV MAHLER · SYMPHONIE NR. 2</span><span>PARTITUR &amp; KOMMENTAR</span></footer></div></div></main></>;
 }
 class Boundary extends React.Component<{
     children: React.ReactNode;

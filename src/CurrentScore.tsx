@@ -12,12 +12,12 @@ export function CurrentScore({vocal,data,trackId,fingerprint,time,selectedNumber
  const top=Math.max(0,m.box[1]*1232-28);
  const height=Math.min(1232-top,Math.max(160,m.box[3]*1232+56));
  const left=Math.max(0,Math.min(911-560,m.box[0]*911+m.box[2]*911/2-280));
- const url=`/assets/scores/third/page-${m.page}.webp`;
+ const url=`/assets/scores/third/transparent/page-${m.page}.webp`;
  return <figure className="current-score">
   <ScoreToolbar number={m.number} max={581} page={String(m.page)} manual={selectedNumber!==null} onSelect={onSelect} onFollow={()=>onSelect(null)} onReplay={interval?()=>onReplay(Math.max(0,interval.start-2),Math.min(data.tracks.find(t=>t.id===trackId)!.duration,interval.end+2)):undefined} zoom={zoom} onZoom={()=>Zoom(!zoom)}><p>第三乐章扫描谱的小节索引及离线音频对齐；具体时间与框选仍待人工校核。</p></ScoreToolbar>
   {vocal}
   <div className="score-follow-pages" data-zoom={zoom}>
-  <ScoreViewport pages={[{url,page:m.page,view:[left,top,560,height],box:[m.box[0]*911,m.box[1]*1232,m.box[2]*911,m.box[3]*1232],label:`第三乐章第 ${m.number} 小节附近的原谱`}]} preload={[m.page<127?`/assets/scores/third/page-${m.page+1}.webp`:url]}/>
+  <ScoreViewport pages={[{url,page:m.page,view:[left,top,560,height],box:[m.box[0]*911,m.box[1]*1232,m.box[2]*911,m.box[3]*1232],label:`第三乐章第 ${m.number} 小节附近的原谱`}]} preload={[...(m.page>80?[`/assets/scores/third/transparent/page-${m.page-1}.webp`]:[]),m.page<127?`/assets/scores/third/transparent/page-${m.page+1}.webp`:url]}/>
 
   </div>
  </figure>

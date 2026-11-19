@@ -7,9 +7,9 @@ import {parseByteRange} from './scripts/audio-range.mjs';
 const mime={'.m4a':'audio/mp4','.flac':'audio/flac','.m3u8':'application/vnd.apple.mpegurl','.m4s':'audio/mp4','.mp4':'audio/mp4'};
 async function hash(path){const h=createHash('sha256');for await(const chunk of createReadStream(path))h.update(chunk);return 'sha256:'+h.digest('hex')}
 export default defineConfig(({mode,command})=>{
- const pages=command==='build'&&mode!=='local';
+ const pages=command==='build'&&mode!=='portable';
  let library,outDir,building=false;const audioFiles=new Map();
- return {build:{copyPublicDir:true},server:{host:'127.0.0.1',fs:{deny:['**/.git/**','**/.env*','**/Recording/**','**/.local/**']}},plugins:[{
+ return {build:{copyPublicDir:true,chunkSizeWarningLimit:650,rollupOptions:{output:{manualChunks(id){if(id.includes('node_modules/hls.js'))return 'hls';if(id.includes('node_modules'))return 'vendor';if(id.includes('/content/'))return 'content-'+id.split('/').pop().replace(/[^a-zA-Z0-9]/g,'-')}}}},server:{host:'127.0.0.1',fs:{deny:['**/.git/**','**/.env*','**/Recording/**','**/.local/**']}},plugins:[{
   name:'project-recording-assets',
   async configResolved(config){
    building=config.command==='build';outDir=resolve(config.build.outDir);library=JSON.parse((await readFile('.local/recording.json','utf8')).replace(/^\uFEFF/,''));

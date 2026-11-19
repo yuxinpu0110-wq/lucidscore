@@ -1,8 +1,8 @@
-import first from '../content/listen_guide/v2.0/m1.md?raw';
-import second from '../content/listen_guide/v2.0/m2.md?raw';
-import third from '../content/listen_guide/v1.0/code_artifact.md?raw';
-import fourth from '../content/listen_guide/v1.0/code_artifact (1).md?raw';
-import fifth from '../content/listen_guide/v2.0/m5.md?raw';
+import first from '../content/listen_guide/V3/m1.md?raw';
+import second from '../content/listen_guide/V3/m2.md?raw';
+import third from '../content/listen_guide/V3/m3.md?raw';
+import fourth from '../content/listen_guide/V3/m4.md?raw';
+import fifth from '../content/listen_guide/V3/m5.md?raw';
 import {parseGuideMarkdown} from './guideMarkdown';
 import {validateGuideDocument,type GuideData} from './guideContent';
 

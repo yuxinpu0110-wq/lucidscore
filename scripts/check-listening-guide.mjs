@@ -2,7 +2,7 @@ import {chromium,expect} from '@playwright/test';
 import {spawn} from 'node:child_process';
 import {readFile} from 'node:fs/promises';
 import {parseGuideMarkdown} from '../src/guideMarkdown.ts';
-const authorGuides=parseGuideMarkdown(await readFile('content/listen_guide/v1.0/code_artifact.md','utf8'));const rottPrompt=authorGuides.guides.find(g=>g.id==='g09').prompt;
+const authorGuides=parseGuideMarkdown(await readFile('content/listen_guide/V3/m3.md','utf8'));const rottPrompt=authorGuides.guides.find(g=>g.id==='m3_g09').prompt;
 
 const server=spawn('node',['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','5193','--strictPort'],{stdio:'ignore',windowsHide:true});
 let browser;

@@ -1,0 +1,19 @@
+main { --bg-primary:var(--bg-canvas,#08090c); --player-surface:rgba(19,23,29,.92); --player-ink:#f4f0ea; --player-track:rgba(255,255,255,.14); --player-rim:rgba(255,255,255,.12); --player-shadow:0 12px 32px rgba(0,0,0,.5); --player-button:rgba(255,255,255,.06); }
+main[data-score-mode='light'],main[data-theme='light'],[data-theme='light'] main {
+ --bg-primary:#F4EFE6; --player-surface:rgba(250,247,240,.92); --player-ink:#1C1917; --player-track:rgba(28,25,23,.14); --player-rim:rgba(28,25,23,.12); --player-shadow:0 12px 32px rgba(28,25,23,.10); --player-button:rgba(28,25,23,.07);
+}
+.lyrics-panel { height:auto !important; min-height:65px; max-height:none !important; overflow:visible !important; padding-block:16px 22px; }
+.lyrics-text { min-width:0; height:auto; overflow:visible; }
+.lyrics-panel .lyrics-original,.lyrics-panel .lyrics-translation { height:auto; max-height:none; overflow:visible; white-space:pre-line; overflow-wrap:anywhere; line-height:1.65; }
+@media(max-width:768px) {
+ main .player .floating-player-dock,main[data-concert='true'] .player .floating-player-dock { background:var(--player-surface); border:1px solid var(--player-rim); box-shadow:var(--player-shadow); color:var(--player-ink); }
+ main .floating-player-dock .transport>button { color:var(--player-ink) !important; }
+ main .floating-player-dock .mobile-play-svg { fill:var(--player-ink); filter:none; }
+ main .floating-player-dock .mobile-time-row,main .floating-player-dock output { color:var(--player-ink); }
+ main .floating-player-dock .transport>button:not(.primary) { background:var(--player-button) !important; border-radius:999px; }
+ main .floating-player-dock .timeline,main[data-concert='true'] .floating-player-dock .timeline { background:linear-gradient(90deg,var(--player-ink) var(--progress,0%),var(--player-track) var(--progress,0%)); touch-action:none; }
+ main .floating-player-dock .timeline::-webkit-slider-thumb { background:var(--player-ink); box-shadow:none; }
+ main .floating-player-dock .timeline::-moz-range-thumb { background:var(--player-ink); box-shadow:none; }
+ main .mobile-chapter-ticks i { background:var(--player-ink); opacity:.3; }
+ main[data-view-mode='stage']::after { background:linear-gradient(to bottom,transparent,var(--bg-primary) calc(100% - 43px - env(safe-area-inset-bottom,0px)),var(--bg-primary)); }
+}

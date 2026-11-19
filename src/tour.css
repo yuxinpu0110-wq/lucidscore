@@ -1,0 +1,28 @@
+.tour-lobby-card { display:flex; flex-direction:column; gap:7px; margin-top:16px; padding:14px 22px; border-radius:18px; background:var(--glass-surface); color:var(--text-primary); border:1px solid var(--glass-rim-border); }
+.tour-lobby-card strong { font:400 16px/1.5 var(--font-chinese); }
+.tour-lobby-card small { opacity:.6; font-size:11px; }
+.tour-bar { grid-column:1/-1; display:flex; align-items:center; gap:8px; height:48px; min-width:0; border-radius:20px; padding:4px 10px; border:1px solid var(--glass-rim-border); background:var(--glass-surface); }
+.tour-bar button { min-height:30px; padding:4px 8px; font-size:11px; border:0; background:transparent; white-space:nowrap; }
+.tour-desktop { display:flex; flex:1; gap:3px; }
+.tour-desktop [aria-current] { background:linear-gradient(90deg,var(--accent-glow) var(--tour-progress,0%),transparent var(--tour-progress,0%)); border-radius:12px; }
+.tour-bar output { font:11px var(--font-number); white-space:nowrap; }
+.tour-mobile,.tour-dots { display:none; }
+.tour-loading { font-size:10px; animation:tour-pulse 2s ease-in-out infinite; }
+.tour-cue { padding:10px 0 16px; border-bottom:1px solid var(--glass-rim-border); margin-bottom:12px; font-size:13px; line-height:1.7; }
+.tour-cue p { margin:0 0 4px; opacity:.6; }
+.tour-cue strong { font-weight:400; }
+.prologue-copy .prologue-tour-link { pointer-events:auto; margin-top:18px; border:0; background:transparent; box-shadow:none; text-decoration:underline; text-underline-offset:6px; color:#e4ceaa; font:12px var(--font-chinese); }
+.tour-notice { font-size:12px; color:var(--text-secondary); }
+.tour-finish { position:fixed; z-index:200; left:50%; top:50%; transform:translate(-50%,-50%); width:min(550px,calc(100vw - 32px)); padding:28px; border-radius:24px; border:1px solid var(--glass-rim-border); background:var(--bg-canvas); box-shadow:0 0 0 100vmax #0009,0 20px 80px #0008; }
+.tour-finish h2 { font:400 23px/1.6 var(--font-chinese); }
+.tour-finish p { font-size:14px; line-height:1.8; margin:18px 0; }
+.tour-finish button { margin:4px; }
+@keyframes tour-pulse { 50% { opacity:.45; } }
+@media(max-width:768px) {
+ .tour-desktop { display:none; }.tour-mobile { display:block; flex:1; font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+ .tour-bar { gap:4px; padding:4px 6px; height:46px; }.tour-bar button { padding:3px; font-size:10px; }
+ .tour-dots { display:flex; gap:3px; }.tour-dots i { width:3px; height:3px; border-radius:50%; background:var(--text-secondary); opacity:.3; }.tour-dots [data-active=true] { background:var(--accent-primary); opacity:1; }
+ .tour-loading { position:absolute; transform:translateY(17px); font-size:8px; }
+ .tour-lobby-card { width:100%; padding:10px 16px; }.tour-lobby-card strong { font-size:14px; }
+}
+@media(prefers-reduced-motion:reduce) { .tour-loading { animation:none; } }

@@ -1,0 +1,85 @@
+{
+  "workId": "mahler-symphony-2",
+  "curatedTours": [
+    {
+      "id": "highlights",
+      "title": "精华导听 · 6 个决定性瞬间",
+      "status": "needs_review",
+      "boundaryNote": "复用现有估算小节映射；切点与乐句呼吸仍待人工回听微调。",
+      "stops": [
+        {
+          "step": 1,
+          "shortTitle": "地底的叩问",
+          "listeningCue": "先只听低音弦乐如何冲刺，再留意停顿留下的空隙。",
+          "bridgeNote": "从第一声低音出发，听冲刺与停顿怎样交替。",
+          "movementId": 1,
+          "sectionId": "m1_g01",
+          "clipStart": 0.0,
+          "clipEnd": 64.9,
+          "fromBar": 1,
+          "toBar": 17
+        },
+        {
+          "step": 2,
+          "shortTitle": "乌云裂开的阳光",
+          "listeningCue": "留意弦乐的长线条，与开篇的短促动作有何不同。",
+          "bridgeNote": "仍在第一乐章，音乐换了一种步伐。",
+          "movementId": 1,
+          "sectionId": "m1_g05",
+          "clipStart": 185.6,
+          "clipEnd": 256.3,
+          "fromBar": 48,
+          "toBar": 63
+        },
+        {
+          "step": 3,
+          "shortTitle": "泛黄照片里的三拍子",
+          "listeningCue": "跟着弦乐轻轻数三拍，听舞步怎样摆动。",
+          "bridgeNote": "从第一乐章转向一支三拍子的乡村舞曲。",
+          "movementId": 2,
+          "sectionId": "m2_g01",
+          "clipStart": 0.0,
+          "clipEnd": 67.1,
+          "fromBar": 1,
+          "toBar": 24
+        },
+        {
+          "step": 4,
+          "shortTitle": "狂欢面具下的尖叫",
+          "listeningCue": "听反复流动的音型，怎样被突然扩大的乐队声音打断。",
+          "bridgeNote": "舞步转成不停旋转的音型，接下来留意它如何被撕开。",
+          "movementId": 3,
+          "sectionId": "m3_g17",
+          "clipStart": 535.8,
+          "clipEnd": 555.5,
+          "fromBar": 460,
+          "toBar": 480
+        },
+        {
+          "step": 5,
+          "shortTitle": "人声初次降临：《原光》",
+          "listeningCue": "先听独唱的第一句，再听铜管如何回应。",
+          "bridgeNote": "乐队的强奏退去，一位独唱者开始发声。",
+          "movementId": 4,
+          "sectionId": "m4_g01",
+          "clipStart": 0.0,
+          "clipEnd": 118.9,
+          "fromBar": 1,
+          "toBar": 22
+        },
+        {
+          "step": 6,
+          "shortTitle": "永恒的降 E 大调",
+          "listeningCue": "听合唱、管风琴与钟声怎样汇合，直到最后一个和弦落定。",
+          "bridgeNote": "从独唱的祈祷跳到终曲尾声，听声音如何扩展到全体。",
+          "movementId": 5,
+          "sectionId": "m5_g35",
+          "clipStart": 2108.4,
+          "clipEnd": 2318.6666666666665,
+          "fromBar": 696,
+          "toBar": 762
+        }
+      ]
+    }
+  ]
+}

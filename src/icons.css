@@ -1,0 +1,50 @@
+svg.ui-icon {
+ display:inline-block;
+ max-height:none;
+ margin:0;
+ padding:0;
+ border:0;
+ border-radius:0;
+ background:none;
+ color:inherit;
+ vertical-align:-.15em;
+ flex:none;
+}
+.review-trigger,.compact-mode-toggle,.prologue-skip {
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:6px;
+}
+.prologue-skip[hidden] { display:none; }
+.guide-pagination button,.measure-stepper button {
+ display:inline-grid;
+ place-items:center;
+}
+.score-toolbar-right button { display:inline-flex; align-items:center; gap:4px; }
+.guide-share-icon {
+ position:relative;
+ display:inline-grid;
+ width:15px;
+ height:15px;
+}
+.guide-share-icon .ui-icon { grid-area:1/1; transition:opacity .18s ease,transform .18s ease; }
+.guide-share-icon .ui-icon:last-child,
+.guide-share-icon[data-copied='true'] .ui-icon:first-child { opacity:0; transform:scale(.85); }
+.guide-share-icon[data-copied='true'] .ui-icon:last-child { opacity:1; transform:scale(1); }
+.share-feedback[data-copied='true'] {
+ display:block;
+ position:absolute;
+ width:1px;
+ height:1px;
+ overflow:hidden;
+ clip-path:inset(50%);
+ white-space:nowrap;
+}
+.movement-card-arrow { display:none; }
+@media(max-width:768px) {
+ [data-view-mode='lobby'] .movement-card-arrow { display:inline-flex; margin-inline-start:2px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .guide-share-icon .ui-icon { transition:none; }
+}

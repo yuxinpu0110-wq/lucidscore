@@ -1,13 +1,14 @@
 import {guideBarLimits,type GuideData,type Guide} from './guideContent.ts';
+import {parseBarTarget} from './guideBarLink.ts';
 
 const headings={'赏析':'appreciation','结构':'structure','和声':'harmony','配器':'orchestration','提示':'prompt'} as const;
 type Section=keyof typeof headings;
 export function validateGuideLinks(text:string,movement=3){
  if(/<[^>]*>/.test(text))throw Error('正文不支持 HTML，请使用纯文字和 Markdown 链接');
  for(const match of text.matchAll(/\[([^\]\n]+)\]\(([^)\n]+)\)/g)){
-  const target=/^bar:(\d+)(?:-(\d+))?$/.exec(match[2]);
-  const limit=guideBarLimits[movement];
-  if(!target||!limit||+target[1]<1||+target[1]>limit||(target[2]&&(+target[2]<+target[1]||+target[2]>limit)))throw Error(`无效的小节链接：${match[2]}；本乐章导读范围为 bar:1 至 bar:${limit}`);
+  const target=parseBarTarget(match[2]);
+  const limit=guideBarLimits[target?.movement??movement];
+  if(!target||!limit||target.from<1||target.to<target.from||target.to>limit)throw Error(`无效的小节链接：${match[2]}；目标乐章导读范围为 1 至 ${limit} 小节`);
  }
  const rest=text.replace(/\[[^\]\n]+\]\([^)\n]+\)/g,'');
  if(/\]\(|\[[^\]\n]*$/.test(rest))throw Error('小节链接括号不完整');

@@ -39,7 +39,7 @@ export function CurrentScorePages({vocal,data,measures,trackId,fingerprint,time,
    </ScoreToolbar>
    {selectedNumber!==null&&!selectedBar&&<p className="guide-reading-status">稿件第 {selectedNumber} 小节尚未对应到此谱本；谱面保持当前播放位置。</p>}
    {vocal}
-   {region?<div className="score-follow-pages" data-zoom={zoom}><ScoreViewport pages={scene} preload={(data.regions[index+1]?.pages||[]).map(p=>p.url)}/></div>:<p role="status">此处暂无同步谱面，可继续聆听。</p>}
+   {region?<div className="score-follow-pages" data-zoom={zoom}><ScoreViewport pages={scene} preload={[...(data.regions[index-1]?.pages||[]),...(data.regions[index+1]?.pages||[])].map(p=>p.url)}/></div>:<p role="status">此处暂无同步谱面，可继续聆听。</p>}
 
   </>}
    

@@ -12,7 +12,7 @@ export class MahlerAudioEngine {
  constructor(readonly audio:HTMLAudioElement,private fade:(value:number,seconds:number)=>void){}
  load(url:string,fallback?:string){
   const token=++this.generation;this.sourceAbort.abort();this.sourceAbort=new AbortController();this.cancelSeek();this.hls?.destroy();this.hls=null;
-  this.audio.pause();this.audio.preload='metadata';
+  this.audio.pause();this.audio.preload='auto';
   const playlist=/\.m3u8(?:$|[?#])/i.test(url);
   // Edge also advertises native HLS, but its native buffering cannot honor our
   // 60s/60s policy. Prefer MSE there; Safari retains its native HLS pipeline.

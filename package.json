@@ -1,6 +1,6 @@
 {
   "name": "lucidscore",
-  "version": "2.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -42,9 +42,10 @@
     "test:mobile": "node scripts/check-mobile.mjs",
     "videos:prepare": "python scripts/prepare-prologue.py",
     "test:prologue": "node scripts/check-prologue.mjs",
-    "build:local": "tsc --noEmit && vite build --mode local",
+    "build:local": "tsc --noEmit && vite build --mode portable",
     "prebuild:local": "npm run recording:prepare",
-    "deploy": "npm run build && wrangler pages deploy ./dist --project-name=lucidscore"
+    "deploy": "npm run build && wrangler pages deploy ./dist --project-name=lucidscore",
+    "dev:fast": "npm run build:local && vite preview --host 127.0.0.1 --port 5173 --strictPort"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.3.0",

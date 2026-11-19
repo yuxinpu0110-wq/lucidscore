@@ -20,7 +20,7 @@ describe('one-node audio controller',()=>{
  });
  it('cancels delayed work on source changes and has a bounded gain-restoration fallback',()=>{
   vi.useFakeTimers();const a=new Media(),fade=vi.fn(),engine=new MahlerAudioEngine(a as unknown as HTMLAudioElement,fade);
-  engine.seek(10);engine.load('/audio/next.m4a');vi.advanceTimersByTime(3000);expect(a.currentTime).toBe(0);expect(a.src).toBe('/audio/next.m4a');expect(a.preload).toBe('metadata');
+  engine.seek(10);engine.load('/audio/next.m4a');vi.advanceTimersByTime(3000);expect(a.currentTime).toBe(0);expect(a.src).toBe('/audio/next.m4a');expect(a.preload).toBe('auto');
   a.paused=false;engine.seek(20);vi.advanceTimersByTime(2040);expect(fade).toHaveBeenLastCalledWith(1,.06);engine.dispose();
  });
  it('preserves playhead and intent on fatal HLS fallback without stale restoration after another load',async()=>{

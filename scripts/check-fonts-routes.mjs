@@ -33,7 +33,7 @@ try {
   return result;
  });
  for(const face of loaded){expect(face.count).toBeGreaterThan(0);expect(face.loaded).toBe(true)}
- await page.getByRole('button',{name:'跳过序幕 →',exact:true}).click();
+ await page.getByRole('button',{name:/^跳过序幕(?: →)?$/}).click();
  expect(await page.locator('.lobby-hero-section h1').evaluate(e=>getComputedStyle(e).fontFamily)).toContain('Noto Serif SC');
  await page.locator('nav button').first().click();await page.waitForTimeout(900);
  expect(await page.locator('.guide-body').evaluate(e=>getComputedStyle(e).fontFamily)).toContain('Noto Serif SC');

@@ -8,31 +8,31 @@
 
 ## guide:m1_g01 | 紧绷的神经与第一记重拳
 位置: 第 1 乐章 · 第 1—5 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-高音弦乐绷紧如刀锋，低音像重拳一样从脚底猛砸上来——马勒的葬礼不是为了让人安息，而是一场不甘心的抗辩。
+高音弦乐绷紧如刀锋，低音从脚底猛砸上来——马勒的葬礼不是为了让人安息，而是一场不甘心的抗辩。
 
 ## guide:m1_g02 | 窒息的停顿与第二次冲撞
 位置: 第 1 乐章 · 第 6—17 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-留意两次猛冲之间那几秒窒息的空白，以及力量耗尽后，低音一格一格往深渊下沉的重量。
+两次猛冲之间留出几秒窒息的空白，随后低音一格一格往深渊下沉。
 
 ## guide:m1_g03 | 沉重的送葬步伐与木管的哀叹
 位置: 第 1 乐章 · 第 18—27 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-上方双簧管在凄凉地哭泣，底下一步一顿的送葬步伐却像钟摆一样冷酷、毫不动摇。
+上方双簧管在凄凉地哭泣，底下一步一顿的送葬步伐却毫不动摇。
 
 ## guide:m1_g04 | 低音的反扑与铜管的冷眼
 位置: 第 1 乐章 · 第 28—42 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -40,15 +40,15 @@
 
 ## guide:m1_g05 | 遥远天际的第一缕微风
 位置: 第 1 乐章 · 第 43—56 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-沉重的黑云突然裂开一道缝隙，圆号与小提琴从高处吹来一阵微风，温柔得像一场不真实的幻觉。
+沉重的黑云突然裂开一道缝隙，圆号与小提琴从高处吹来一阵微风，温柔得近乎不真实。
 
 ## guide:m1_g06 | 幻象的膨胀与突然断电
 位置: 第 1 乐章 · 第 57—62 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -56,47 +56,47 @@
 
 ## guide:m1_g07 | 狂暴的挣扎：肉搏战
 位置: 第 1 乐章 · 第 63—88 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-听听全乐队撕咬般的咆哮与冲撞——当美好的幻象破灭，人只能赤手空拳与命运肉搏。
+全乐队在密集的声部撕咬中正面冲撞——当美好的幻象破灭，人只能赤手空拳与命运肉搏。
 
 ## guide:m1_g08 | 呈示部的筋疲力尽与石碑休止
 位置: 第 1 乐章 · 第 89—116 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-当用尽全力的咆哮最终只换来一片死寂，反抗死亡还有出路吗？
+当用尽全力的咆哮最终只换来一片死寂，反抗死亡的出路还在何处。
 
 ## guide:m1_g09 | 跌入田园的旧梦
 位置: 第 1 乐章 · 第 117—143 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-穿过漫长的黑暗，眼前豁然开朗——英国管与长笛描绘出一片纯净如童年的田园旧梦。
+穿过漫长的黑暗，英国管与长笛描绘出一片纯净如童年的田园旧梦。
 
 ## guide:m1_g10 | 阳光下的眷恋：回忆的舒展
 位置: 第 1 乐章 · 第 144—162 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-把耳朵交给小提琴深情舒展的线条，去体会那种明知是梦、却渴望永远停留在阳光里的眷恋。
+小提琴深情舒展的线条里，藏着明知是梦、却渴望永远停留在阳光里的眷恋。
 
 ## guide:m1_g11 | 草丛底下的毒蛇：暗影潜入
 位置: 第 1 乐章 · 第 163—175 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-小提琴还在高处赞美阳光，但请留意低音区——那个沉重的送葬节奏已经悄悄潜入草丛底下。
+小提琴还在高处赞美阳光，低音区却已经悄悄渗入了那个沉重的送葬节奏。
 
 ## guide:m1_g12 | 第一次崩塌：风暴碾碎牧歌
 位置: 第 1 乐章 · 第 176—194 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -104,15 +104,15 @@
 
 ## guide:m1_g13 | 绝望的嘶吼与风暴退潮
 位置: 第 1 乐章 · 第 195—207 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
 暴风雨退去后的荒原，比暴风雨本身更让人感到刺骨的寒冷。
 
-## guide:m1_g14 | 荒原上的骷髅步伐與《末日经》
+## guide:m1_g14 | 荒原上的骷髅步伐与《末日经》
 位置: 第 1 乐章 · 第 208—225 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -120,7 +120,7 @@
 
 ## guide:m1_g15 | 废墟上的微光与苦涩纠缠
 位置: 第 1 乐章 · 第 226—244 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -128,15 +128,15 @@
 
 ## guide:m1_g16 | 山雨欲来：地底的震动与集结
 位置: 第 1 乐章 · 第 245—269 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-注意听地底下越来越密集的震动，各路声部正在暗处集结，一场真正的灭顶之灾就在头顶凝聚。
+地底下的震动越来越密集，各路声部正在暗处集结，一场真正的灭顶之灾就在头顶凝聚。
 
 ## guide:m1_g17 | 绝望的蓄力与步步紧逼
 位置: 第 1 乐章 · 第 270—290 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -144,7 +144,7 @@
 
 ## guide:m1_g18 | 灭顶之灾的第一击
 位置: 第 1 乐章 · 第 291—314 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -152,23 +152,23 @@
 
 ## guide:m1_g19 | 撕裂苍穹的终极惨叫
 位置: 第 1 乐章 · 第 315—329 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-留意第325小节那声刺穿耳膜的恐怖和弦——那是生命被逼入绝境时最惨烈的嘶吼。
+第325小节那声刺穿耳膜的恐怖和弦，是生命被逼入绝境时最惨烈的嘶吼。
 
 ## guide:m1_g20 | 宿命的铁蹄重临（再现部）
 位置: 第 1 乐章 · 第 330—349 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-拼死挣扎了这么久，为什么低头一看，我们还是站在最初的葬礼队伍里？
+拼死挣扎了这么久，低头一看，我们依然站在最初的葬礼队伍里。
 
 ## guide:m1_g21 | 铁门关闭：再现部的冷酷收束
 位置: 第 1 乐章 · 第 350—361 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -176,7 +176,7 @@
 
 ## guide:m1_g22 | 隔着泪水重看的春风
 位置: 第 1 乐章 · 第 362—391 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -184,7 +184,7 @@
 
 ## guide:m1_g23 | 死灰复燃前的墓园死寂
 位置: 第 1 乐章 · 第 392—415 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -192,7 +192,7 @@
 
 ## guide:m1_g24 | 从灰烬里爬起的最后挽歌
 位置: 第 1 乐章 · 第 416—434 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -200,7 +200,7 @@
 
 ## guide:m1_g25 | 尾声的回光返照与塌方
 位置: 第 1 乐章 · 第 435—445 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
@@ -208,31 +208,31 @@
 
 ## guide:m1_g26 | 坠入虚无的最后一步
 位置: 第 1 乐章 · 第 446—454 小节
-来源: content/listen_guide/v2.0/m1.md
+来源: content/listen_guide/V3/m1.md
 
 ### 提示
 
-轰轰烈烈地挣扎了二十分钟，最终只换来两声干瘪的拨弦——人这一生，难道真的就这样算了吗？
+轰轰烈烈地挣扎了二十分钟，最终只换来两声干瘪的拨弦——人这一生，究竟该如何作答。
 
 ## guide:m2_g01 | 葬礼过后的第一抹苦笑
 位置: 第 2 乐章 · 第 1—16 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
-葬礼之后响起的这首奥地利民间舞曲，像站在废墟上翻看旧相册时，嘴角泛起的一抹温柔苦笑。
+葬礼之后响起的这首奥地利民间舞曲，像站在废墟上翻看旧相册时嘴角泛起的一抹温柔苦笑。
 
 ## guide:m2_g02 | 舞步里的微醺与摇摆
 位置: 第 2 乐章 · 第 17—38 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
-感受弦乐那种一步一顿、忽快忽慢的微醺摇摆感，每个音符都带着欲言又止的留恋。
+弦乐一步一顿、忽快忽慢的微醺摇摆里，每个音符都带着欲言又止的留恋。
 
 ## guide:m2_g03 | 大提琴在阳光下的深情低语
 位置: 第 2 乐章 · 第 39—60 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -240,7 +240,7 @@
 
 ## guide:m2_g04 | 舞步渐远与阴影的逼近
 位置: 第 2 乐章 · 第 61—84 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -248,7 +248,7 @@
 
 ## guide:m2_g05 | 第一片乌云：焦虑的碎步起跑
 位置: 第 2 乐章 · 第 85—102 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -256,7 +256,7 @@
 
 ## guide:m2_g06 | 乌云压顶：木管的悲鸣与退潮
 位置: 第 2 乐章 · 第 103—132 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -264,23 +264,23 @@
 
 ## guide:m2_g07 | 拨弦上的重逢：像露珠一样脆弱的美好
 位置: 第 2 乐章 · 第 133—165 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
 整支弦乐队放下了琴弓，只用手指轻轻拨响旋律——这份失而复得的美好，脆弱得像一碰就会碎的露珠。
 
-## guide:m2_g08 | 八音盒里的木管对话与暗流
+## guide:m2_g08 | 拨弦声里的木管对话与暗流
 位置: 第 2 乐章 · 第 166—209 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
-八音盒般的拨弦一点点走慢、变疏，窗外第二场更猛烈的暴风雨正在暗处聚集。
+晶莹的拨弦一点点走慢、变疏，窗外第二场更猛烈的暴风雨正在暗处聚集。
 
 ## guide:m2_g09 | 第二片乌云：狂风暴雨的正面突袭
 位置: 第 2 乐章 · 第 210—232 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -288,7 +288,7 @@
 
 ## guide:m2_g10 | 撕心裂肺的哭喊：回忆里的伤口崩裂
 位置: 第 2 乐章 · 第 233—254 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -296,7 +296,7 @@
 
 ## guide:m2_g11 | 劫后余生的滑音：擦干眼泪后的微笑
 位置: 第 2 乐章 · 第 255—272 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -304,7 +304,7 @@
 
 ## guide:m2_g12 | 最后的依偎与漫步
 位置: 第 2 乐章 · 第 273—282 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
@@ -312,199 +312,199 @@
 
 ## guide:m2_g13 | 渐行渐远的旧时光尾声
 位置: 第 2 乐章 · 第 283—299 小节
-来源: content/listen_guide/v2.0/m2.md
+来源: content/listen_guide/V3/m2.md
 
 ### 提示
 
-当温暖的老照片最终合上，靠躲进过去的回忆里，真的能替我们回答未来的生死吗？
+当温暖的老照片最终合上，躲进过去的回忆里并不足以回答未来的生死。
 
-## guide:g01 | 先把脚步停住
+## guide:m3_g01 | 先把脚步停住
 位置: 第 3 乐章 · 第 1—5 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 两下短促干脆的定音鼓敲击，把刚才温柔的旧梦瞬间震醒。
 
-## guide:g02 | 转轮开始转动
+## guide:m3_g02 | 转轮开始转动
 位置: 第 3 乐章 · 第 6—12 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 细密的弦乐开始滚动，一台停不下来的水下转轮就此启动。
 
-## guide:g03 | 熟悉的故事换了说法
+## guide:m3_g03 | 熟悉的故事换了说法
 位置: 第 3 乐章 · 第 13—75 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
-木管吹出滑稽的《鱼群布道》旋律：鱼儿们看似虔诚听讲，转身却照旧盲目打转——如果一生只是原地兜圈，忙碌本身还有意义吗？
+木管吹出滑稽的《鱼群布道》旋律：鱼儿们看似虔诚听讲，转身却照旧盲目打转。
 
-## guide:g04 | 笑声里有一点尖锐
+## guide:m3_g04 | 笑声里有一点尖锐
 位置: 第 3 乐章 · 第 76—102 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 光线稍微变亮，但高音木管里透出的那抹笑意，听起来尖锐而勉强。
 
-## guide:g05 | 旋律走，背景仍在转
+## guide:m3_g05 | 旋律走，背景仍在转
 位置: 第 3 乐章 · 第 103—135 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 无论上面的旋律怎么变换姿态，脚下那股旋转的惯性始终没有放过任何人。
 
-## guide:g06 | 热闹还没有答案
+## guide:m3_g06 | 热闹还没有答案
 位置: 第 3 乐章 · 第 136—189 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 小号带着夸张俗气的腔调闯入，像在用刻意的喧哗掩盖心底的空虚。
 
-## guide:g07 | 同一支舞，换了光线
+## guide:m3_g07 | 同一支舞，换了光线
 位置: 第 3 乐章 · 第 190—211 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 阴暗的小调突然翻成敞亮的大调，像舞台瞬间换了一层灿烂的灯光，但旋转并未停止。
 
-## guide:g08 | 对比不等于停下来
+## guide:m3_g08 | 对比不等于停下来
 位置: 第 3 乐章 · 第 212—256 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 铜管一次次昂首向上冲锋，试图挣脱脚下那股盲目打转的引力。
 
-## guide:g09 | 四小节的旁支
+## guide:m3_g09 | 四小节的旁支
 位置: 第 3 乐章 · 第 257—260 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
-留意这短短四小节独奏小号，像喧嚣尘世里突然闪过的一句真话。
+这短短四小节独奏小号，像喧嚣尘世里突然闪过的一句真话。
 
-## guide:g10 | 岔路落回主线
+## guide:m3_g10 | 岔路落回主线
 位置: 第 3 乐章 · 第 261—270 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 小号把高远的念头带向远方，周围嘈杂的旋转声也随之渐渐隐退。
 
-## guide:g11 | 声音忽然变薄
+## guide:m3_g11 | 声音忽然变薄
 位置: 第 3 乐章 · 第 271—300 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 庞大的乐队突然退后，只留下一片空旷的夜色和几声晶莹的竖琴拨弦。
 
-## guide:g12 | 向转折处靠近
+## guide:m3_g12 | 向转折处靠近
 位置: 第 3 乐章 · 第 301—327 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 这段宁静的出神停得越久，就越让人隐隐担心闹钟响起、重回现实的那一刻。
 
-## guide:g13 | 把路折回来
+## guide:m3_g13 | 把路折回来
 位置: 第 3 乐章 · 第 328—347 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 从远方的梦境折回日常的轨道，和声摇摇晃晃，像一时认不出家门。
 
-## guide:g14 | 旧旋律重新出现
+## guide:m3_g14 | 旧旋律重新出现
 位置: 第 3 乐章 · 第 348—379 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 熟悉的鱼群旋律换了一副夸张的面具重返舞台，旋转中多了一丝被拉扯的疲惫。
 
-## guide:g15 | 熟悉不等于安全
+## guide:m3_g15 | 熟悉不等于安全
 位置: 第 3 乐章 · 第 380—408 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 表面依然挂着明亮的笑容，底下的弦乐却像停不下来的发条，催促着人继续往前赶。
 
-## guide:g16 | 旧段落的门槛
+## guide:m3_g16 | 旧段落的门槛
 位置: 第 3 乐章 · 第 409—440 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 旋转的圈子越缩越紧，声部一层层挤压上来，空气变得越来越稀薄。
 
-## guide:g17 | 明亮材料再次回来
+## guide:m3_g17 | 明亮材料再次回来
 位置: 第 3 乐章 · 第 441—464 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 明亮的对比段落再次出现，但低音区不断下坠的线条，预示着脚下的地面正在塌陷。
 
-## guide:g18 | 转轮被撕开
+## guide:m3_g18 | 转轮被撕开
 位置: 第 3 乐章 · 第 465—472 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
-当热闹的旋转突然变成这声刺耳的尖叫，是什么让人再也笑不出来了？
+当热闹的旋转突然变成这声刺耳的尖叫，整场荒诞的秩序宣告彻底破产。
 
-## guide:g19 | 答案被拖住
+## guide:m3_g19 | 答案被拖住
 位置: 第 3 乐章 · 第 473—480 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 撕心裂肺的呐喊过后，下行线条试图慢慢走回地面，但惊魂未定的冲突依然悬在半空。
 
-## guide:g20 | 世界似乎重新运转
+## guide:m3_g20 | 世界似乎重新运转
 位置: 第 3 乐章 · 第 481—500 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
-崩溃过后，世界重新装作若无其事地运转起来，只是每个人心里都多了一道暗影。
+崩溃过后，世界重新装作若无其事地运转起来，只是每个角落里都多了一道暗影。
 
-## guide:g21 | 平静也有记忆
+## guide:m3_g21 | 平静也有记忆
 位置: 第 3 乐章 · 第 501—544 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 第一小提琴拉出极其柔软的线条，像劫后余生的一声长叹。
 
-## guide:g22 | 最后一次转回来
+## guide:m3_g22 | 最后一次转回来
 位置: 第 3 乐章 · 第 545—576 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
 发条快要耗尽了，开头的旋转旋律最后一次匆匆掠过，像一场即将散场的木偶戏。
 
-## guide:g23 | 几小节的告别
+## guide:m3_g23 | 几小节的告别
 位置: 第 3 乐章 · 第 577—581 小节
-来源: content/listen_guide/v1.0/code_artifact.md
+来源: content/listen_guide/V3/m3.md
 
 ### 提示
 
-铜锣低鸣，整场荒诞的热闹突然熄灭——在彻底的寂静里，准备好听见自己内心的声音了吗？
+铜锣低鸣，整场荒诞的热闹突然熄灭，彻底的寂静为内心独白留出了舞台。
 
 ## guide:m4_g01 | 废墟上响起的一声呼唤
 位置: 第 4 乐章 · 第 1—3 小节
-来源: content/listen_guide/v1.0/code_artifact (1).md
+来源: content/listen_guide/V3/m4.md
 
 ### 提示
 
@@ -512,7 +512,7 @@
 
 ## guide:m4_g02 | 铜管筑起的圣殿
 位置: 第 4 乐章 · 第 4—15 小节
-来源: content/listen_guide/v1.0/code_artifact (1).md
+来源: content/listen_guide/V3/m4.md
 
 ### 提示
 
@@ -520,7 +520,7 @@
 
 ## guide:m4_g03 | 苦难与困顿的低语
 位置: 第 4 乐章 · 第 16—35 小节
-来源: content/listen_guide/v1.0/code_artifact (1).md
+来源: content/listen_guide/V3/m4.md
 
 ### 提示
 
@@ -528,7 +528,7 @@
 
 ## guide:m4_g04 | 宽阔街道上的天使与微光
 位置: 第 4 乐章 · 第 36—53 小节
-来源: content/listen_guide/v1.0/code_artifact (1).md
+来源: content/listen_guide/V3/m4.md
 
 ### 提示
 
@@ -536,7 +536,7 @@
 
 ## guide:m4_g05 | 照向永恒的微光
 位置: 第 4 乐章 · 第 54—67 小节
-来源: content/listen_guide/v1.0/code_artifact (1).md
+来源: content/listen_guide/V3/m4.md
 
 ### 提示
 
@@ -544,7 +544,7 @@
 
 ## guide:m5_g01 | 撕裂微光的末日惊雷
 位置: 第 5 乐章 · 第 1—12 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -552,15 +552,15 @@
 
 ## guide:m5_g02 | 废墟上的下行叹息与冷却
 位置: 第 5 乐章 · 第 13—25 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-当狂暴的惊雷把旧世界砸成一片废墟，留在烟尘里的我们该往哪里走？
+当狂暴的惊雷把旧世界砸成一片废墟，留在烟尘里的灵魂该往何处去。
 
 ## guide:m5_g03 | 旷野深处的孤独呼唤者
 位置: 第 5 乐章 · 第 26—42 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -568,7 +568,7 @@
 
 ## guide:m5_g04 | 切开迷雾的半音攀升
 位置: 第 5 乐章 · 第 43—61 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -576,7 +576,7 @@
 
 ## guide:m5_g05 | 亡灵苏醒：《末日经》圣咏登场
 位置: 第 5 乐章 · 第 62—78 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -584,7 +584,7 @@
 
 ## guide:m5_g06 | 泥土里的第一粒种子：渴望动机
 位置: 第 5 乐章 · 第 79—96 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -592,15 +592,15 @@
 
 ## guide:m5_g07 | 第一次圣咏凯旋：复活的器乐预言
 位置: 第 5 乐章 · 第 97—125 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-全套铜管与竖琴突然迸发出漫天金光，在风暴真正降临前，先让你看一眼“复活”的预言。
+全套铜管与竖琴突然迸发出漫天金光，在风暴真正降临前，先让人看一眼“复活”的预言。
 
 ## guide:m5_g08 | 海市蜃楼的坍塌与地下暗流
 位置: 第 5 乐章 · 第 126—141 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -608,7 +608,7 @@
 
 ## guide:m5_g09 | 炼狱的脉搏与《原光》的痛苦呼救
 位置: 第 5 乐章 · 第 142—168 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -616,7 +616,7 @@
 
 ## guide:m5_g10 | 炼狱的沸腾与审判前夜的战栗
 位置: 第 5 乐章 · 第 169—193 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -624,7 +624,7 @@
 
 ## guide:m5_g11 | 死亡大军的集结（进行曲起步）
 位置: 第 5 乐章 · 第 194—210 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -632,7 +632,7 @@
 
 ## guide:m5_g12 | 铁蹄加速与亡灵的咆哮
 位置: 第 5 乐章 · 第 211—225 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -640,15 +640,15 @@
 
 ## guide:m5_g13 | 骷髅的狂飙与弓背击弦
 位置: 第 5 乐章 · 第 226—243 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-留意弦乐用木制弓背敲击琴弦的脆响，像极了荒诞狂奔中枯骨碰撞的冷笑。
+弦乐用木制弓背敲击琴弦发出枯骨般的脆响，像极了荒诞狂奔中的冷笑。
 
 ## guide:m5_g14 | 铜管的狰狞咆哮与第一波顶峰
 位置: 第 5 乐章 · 第 244—261 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -656,15 +656,15 @@
 
 ## guide:m5_g15 | 两个平行世界：遥远军乐与眼前的哭喊
 位置: 第 5 乐章 · 第 262—285 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-舞台上的小提琴在绝望哭喊，后台却飘来热闹的世俗军乐——全世界的热闹，有时与你内心的痛苦毫无关系。
+舞台上的小提琴在绝望哭喊，后台却飘来热闹的世俗军乐——全世界的热闹，有时与内心的痛苦毫无关系。
 
 ## guide:m5_g16 | 内外夹击：痛苦吞噬喧嚣
 位置: 第 5 乐章 · 第 286—309 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -672,7 +672,7 @@
 
 ## guide:m5_g17 | 毁灭的狂潮：脱轨列车的最后冲刺
 位置: 第 5 乐章 · 第 310—325 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -680,7 +680,7 @@
 
 ## guide:m5_g18 | 绝境大逆转：废墟上劈开的金光
 位置: 第 5 乐章 · 第 326—342 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -688,7 +688,7 @@
 
 ## guide:m5_g19 | 辉煌的铜管圣咏：光明的全面胜利
 位置: 第 5 乐章 · 第 343—364 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -696,7 +696,7 @@
 
 ## guide:m5_g20 | 圣咏退潮与大地的神秘震颤
 位置: 第 5 乐章 · 第 365—380 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -704,7 +704,7 @@
 
 ## guide:m5_g21 | 末日大召唤（上）：撕裂天际的号角
 位置: 第 5 乐章 · 第 381—417 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -712,7 +712,7 @@
 
 ## guide:m5_g22 | 末日大召唤（下）：告别尘世的夜莺
 位置: 第 5 乐章 · 第 418—471 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -720,15 +720,15 @@
 
 ## guide:m5_g23 | 比耳语更轻的回答：无伴奏合唱降临
 位置: 第 5 乐章 · 第 472—491 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-经历了近一小时的风暴，为什么回答生死终极追问的，竟是一声比耳语还要轻的合唱？
+经历了近一小时的风暴，回答生死终极追问的，竟是一声比耳语还要轻的合唱。
 
 ## guide:m5_g24 | 春水化冻：器乐的温柔涌动
 位置: 第 5 乐章 · 第 492—500 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -736,7 +736,7 @@
 
 ## guide:m5_g25 | 万物皆有收获：第二段圣咏
 位置: 第 5 乐章 · 第 501—511 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -744,7 +744,7 @@
 
 ## guide:m5_g26 | 伤痕的倾诉：哦，请相信！
 位置: 第 5 乐章 · 第 512—543 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -752,7 +752,7 @@
 
 ## guide:m5_g27 | 你受过的苦绝不会白费！
 位置: 第 5 乐章 · 第 544—559 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -760,15 +760,15 @@
 
 ## guide:m5_g28 | 凡是消亡之物，皆将复活
 位置: 第 5 乐章 · 第 560—579 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-当我们坦然接纳“凡诞生者皆须消亡”，死亡就不再是终结，而是重生的必经之门。
+当坦然接纳“凡诞生者皆须消亡”，死亡就不再是终结，而是重生的必经之门。
 
 ## guide:m5_g29 | 征服死亡：超越恐惧的二重唱
 位置: 第 5 乐章 · 第 580—617 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -776,7 +776,7 @@
 
 ## guide:m5_g30 | 借着我亲手赢回的翅膀！
 位置: 第 5 乐章 · 第 618—627 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -784,15 +784,15 @@
 
 ## guide:m5_g31 | 我将死去，为了活生生地存在！
 位置: 第 5 乐章 · 第 628—639 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-从泥土里的一声叹息，长成这句惊天动地的“我将死去，为了活着”——听见生命破茧而出的巨响了吗？
+从泥土里的一声叹息，长成这句惊天动地的“我将死去，为了活着”。
 
 ## guide:m5_g32 | 管风琴破土：宇宙级的复活凯歌
 位置: 第 5 乐章 · 第 640—655 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
@@ -800,27 +800,27 @@
 
 ## guide:m5_g33 | 那曾跳动过的，终将引领你！
 位置: 第 5 乐章 · 第 656—671 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-无论是心脏热烈的跳动，还是命运残酷的击打，到最后都化作了托举你飞向高处的力量。
+无论是心脏热烈的跳动，还是命运残酷的击打，到最后都化作了托举灵魂飞向高处的力量。
 
 ## guide:m5_g34 | 钟声破空：器乐的狂喜奔流
 位置: 第 5 乐章 · 第 672—695 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-大钢钟在管弦乐的怒海中轰然敲响，超越一切言辞，整个天地都在为生命的尊严而庆贺。
+深钟在管弦乐的怒海中轰然敲响，超越一切言辞，整个天地都在为生命的尊严而庆贺。
 
 ## guide:m5_g35 | 飞向不朽的苍穹：永恒的降E大调
 位置: 第 5 乐章 · 第 696—762 小节
-来源: content/listen_guide/v2.0/m5.md
+来源: content/listen_guide/V3/m5.md
 
 ### 提示
 
-在漫天回荡的钟声与管风琴轰鸣里，那个曾经害怕死亡、怀疑意义的你，找到属于自己的“复活”了吗？
+在漫天回荡的钟声与管风琴轰鸣里，那个曾经害怕死亡、怀疑意义的灵魂，终于抵达了自己的“复活”。
 
 ## real:cue-iii-opening-timpani-first | 开头第一组短音型
 位置: 已核验片段 · 第 3 乐章 · 2—4.5 秒（原分轨）

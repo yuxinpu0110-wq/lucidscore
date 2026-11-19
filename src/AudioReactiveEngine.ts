@@ -51,6 +51,7 @@ export class AudioReactiveEngine {
   }
   this.wake();
  }
+ hasGain(){return !!this.gain}
  fadeTo(value:number,seconds:number){if(!this.gain||!this.ctx)return;const gain=this.gain.gain,now=this.ctx.currentTime;gain.cancelAndHoldAtTime(now);gain.linearRampToValueAtTime(value,now+seconds)}
  private write(name:string,value:number){if(name.startsWith('--audio-')&&value!==0&&Math.abs(value-Number(this.written.get(name)??'-1'))<.005)return;const next=value.toFixed(4);if(this.written.get(name)!==next){document.documentElement.style.setProperty(name,next);this.written.set(name,next)}}
  private wake=()=>{if(!this.disposed&&!this.raf)this.raf=requestAnimationFrame(this.tick)};

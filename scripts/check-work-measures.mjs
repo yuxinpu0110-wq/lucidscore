@@ -40,7 +40,7 @@ try{
   await page.getByRole('radio',{name:'启发探索',exact:true}).check();
   expect(await audio.evaluate(a=>a.currentTime)).toBeCloseTo(origin,2);
   await page.getByRole('button',{name:'播放',exact:true}).click();
-  await expect(page.locator('.cue-inner > button')).toHaveText(guide.prompt+' ↗');
+  await expect(page.locator('.cue-inner > button')).toHaveText(guide.prompt);
   await expect(audio).toHaveJSProperty('paused',false);
   const cueTime=await audio.evaluate(a=>a.currentTime);
   await page.locator('.cue-inner > button').click();await expect(audio).toHaveJSProperty('paused',true);
@@ -57,7 +57,7 @@ try{
   const another=doc.guides[3],span=d.tracks[0].intervals[another.from-1];
   await audio.evaluate((a,t)=>{a.currentTime=t;a.dispatchEvent(new Event('timeupdate'))},span.start+.05);
   await page.getByRole('button',{name:'播放',exact:true}).click();
-  await expect(page.locator('.cue-inner > button')).toHaveText(another.prompt+' ↗');
+  await expect(page.locator('.cue-inner > button')).toHaveText(another.prompt);
   await expect(panel.locator('.guide-heading')).toContainText(another.title);
   await page.getByLabel('隐藏提示，连续聆听',{exact:true}).check();await expect(page.locator('.cue-inner > button')).toHaveCount(0);await expect(audio).toHaveJSProperty('paused',false);
   await page.getByLabel('隐藏提示，连续聆听',{exact:true}).uncheck();

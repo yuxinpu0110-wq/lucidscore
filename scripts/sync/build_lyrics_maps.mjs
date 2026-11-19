@@ -11,7 +11,7 @@ function target(time){const w=warp.anchors;let lo=0,hi=w.length-1;while(hi-lo>1)
 const local=([start,end,offset,total])=>start+(end-start)*offset/total;
 const tracks=[];
 for(const movement of [4,5]){
- const doc=parseLyricsMarkdown(await readFile(`content/listen_guide/script/m${movement}.md`,'utf8'));
+ const doc=parseLyricsMarkdown(await readFile(`content/listen_guide/lyrics/m${movement}.md`,'utf8'));
  const track=manifest.tracks.find(t=>t.movement===movement),offset=manifest.tracks.filter(t=>t.movement<movement).reduce((s,t)=>s+t.duration,0);
  const intervals=anchors.anchors.filter(a=>a.movement===movement).map(a=>{
   const lyric=doc.lyrics.find(l=>l.from===a.from&&l.to===a.to);if(!lyric)throw Error('Lyric range changed');
