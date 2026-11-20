@@ -50,9 +50,9 @@
           "bridgeNote": "舞步转成不停旋转的音型，接下来留意它如何被撕开。",
           "movementId": 3,
           "sectionId": "m3_g17",
-          "clipStart": 535.8,
+          "clipStart": 520.05,
           "clipEnd": 555.5,
-          "fromBar": 460,
+          "fromBar": 441,
           "toBar": 480
         },
         {
@@ -69,14 +69,14 @@
         },
         {
           "step": 6,
-          "shortTitle": "永恒的降 E 大调",
-          "listeningCue": "听合唱、管风琴与钟声怎样汇合，直到最后一个和弦落定。",
-          "bridgeNote": "从独唱的祈祷跳到终曲尾声，听声音如何扩展到全体。",
+          "shortTitle": "钟声破空：器乐的狂喜奔流",
+          "listeningCue": "留意深钟怎样穿过奔涌的乐队，听管风琴与铜管把音乐推向最后一个和弦。",
+          "bridgeNote": "从独唱的祈祷跳到终曲的器乐尾声，听声音如何铺满整个乐团。",
           "movementId": 5,
-          "sectionId": "m5_g35",
-          "clipStart": 2108.4,
+          "sectionId": "m5_g34",
+          "clipStart": 2054.766667,
           "clipEnd": 2318.6666666666665,
-          "fromBar": 696,
+          "fromBar": 672,
           "toBar": 762
         }
       ]

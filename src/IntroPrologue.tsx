@@ -1,9 +1,11 @@
 import {UiIcon} from './UiIcon';
 import {mediaUrl} from './mediaUrl';
+import {highlightsTour} from './curatedTours';
 import {useEffect,useLayoutEffect,useRef,useState} from 'react';
 import {captionFrame,captionFontText} from './prologueCaptions';
 import './prologue.css';
 export const PROLOGUE_SEEN='lucidscore_prologue_seen';
+const highlightsMinutes=Math.round(highlightsTour.stops.reduce((seconds,stop)=>seconds+stop.clipEnd-stop.clipStart,0)/60);
 export const PROLOGUE_CREDITS={composer:'古斯塔夫 · 马勒',title:'c小调第二交响曲「复活」',original:'Gustav Mahler · Symphonie Nr. 2 c-Moll (1888–1894)'};
 export function hasSeenPrologue(){try{return localStorage.getItem(PROLOGUE_SEEN)==='1'}catch{return false}}
 export function prologueCaption(scene:number,time:number){
@@ -60,7 +62,7 @@ export function IntroPrologue({onEnter,onSkip,onTour}:{onTour?:()=>void;onEnter:
    <button hidden={choices} className="prologue-skip" autoFocus onClick={e=>{e.stopPropagation();showGate()}}>跳过序幕 <UiIcon name="right"/></button>
    {startup==='blocked'&&!choices&&<div className="prologue-curtain"><img className="prologue-brand-logo" src="/logo-512.webp" alt="LucidScore" width="68" height="68"/><button className="prologue-ignite" onClick={e=>{e.stopPropagation();ignite()}}>进入现场 · 开启原声</button><p>建议佩戴耳机聆听 · 约 35 秒序幕</p><button className="prologue-silent-skip" onClick={e=>{e.stopPropagation();showGate()}}>跳过并静音浏览</button></div>}
    <div className="prologue-copy" data-credits={credits} data-decisions={choices}>{credits?<div className="prologue-credits"><img className="prologue-brand-logo" src="/logo-512.webp" alt="LucidScore" width="68" height="68"/><p className="prologue-composer">{PROLOGUE_CREDITS.composer}</p><h1 className="prologue-work-title">{PROLOGUE_CREDITS.title}</h1><p className="prologue-original" lang="de">{PROLOGUE_CREDITS.original}</p></div>:<p ref={captionNode} className="prologue-caption">{caption}</p>}
-    {choices&&<div className="prologue-decisions three-choice-gate" onClick={e=>e.stopPropagation()}>{onTour&&<button onClick={()=>{silence();save();onTour()}}><strong>精华导听 · 6 个决定性瞬间</strong><small>约 9 分钟 · 六个瞬间</small></button>}<button onClick={()=>finish(true)}><strong>启发探索 · 完整伴听</strong><small>完整伴听 · 听觉问题引导</small></button><button onClick={()=>finish(false)}><strong>自由检索 · 总谱全集</strong><small>五乐章总谱 · 四维解析</small></button></div>}
+    {choices&&<div className="prologue-decisions three-choice-gate" onClick={e=>e.stopPropagation()}>{onTour&&<button onClick={()=>{silence();save();onTour()}}><strong>精华导听 · 6 个决定性瞬间</strong><small>约 {highlightsMinutes} 分钟 · 六个瞬间</small></button>}<button onClick={()=>finish(true)}><strong>启发探索 · 完整伴听</strong><small>完整伴听 · 听觉问题引导</small></button><button onClick={()=>finish(false)}><strong>自由检索 · 总谱全集</strong><small>五乐章总谱 · 四维解析</small></button></div>}
    </div>
    <div className="prologue-aux" onClick={e=>e.stopPropagation()}>{startup==='playing'&&!choices&&<button className="prologue-advance-hint" onClick={()=>scene===0?next():showGate()}>{scene===0?'点击任意位置跳过':'点击任意位置进入选择'}</button>}{error&&<p role="status">{error}</p>}</div>
   </div>

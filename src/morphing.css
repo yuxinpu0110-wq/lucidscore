@@ -39,9 +39,6 @@ main .floating-player-dock .playback-buffer { position:absolute; left:0; right:0
   inset:auto 24px 20px;
   width:calc(100% - 48px);
   z-index:50;
-  background:var(--player-surface);
-  box-shadow:var(--player-shadow);
-  backdrop-filter:blur(8px);
  }
  main .player .floating-player-dock .morphing-transport>button {
   border:0;
@@ -62,12 +59,19 @@ main .floating-player-dock .playback-buffer { position:absolute; left:0; right:0
 @media(prefers-reduced-motion:reduce) { .morphing-track,.morphing-times { transition:none; } }
 
 /* Shared tactile response for the regular dock and highlights controls. */
+main[data-view-mode='stage'] :is(.player .floating-player-dock,.theatre-tour) {
+ background:var(--player-surface);
+ border:1px solid var(--dock-edge,var(--player-rim));
+ box-shadow:var(--player-shadow);
+ color:var(--player-ink);
+ backdrop-filter:var(--player-blur);
+ -webkit-backdrop-filter:var(--player-blur);
+}
 main .floating-player-dock,main .theatre-tour {
  --touch-halo:rgba(255,255,255,.12);
  --player-drag-x:0px;
  transform:translate3d(0,0,0) scale(1);
  transition:transform .38s cubic-bezier(.34,1.56,.64,1),border-color .15s ease;
- border:1px solid var(--player-rim);
  border-radius:24px;
 }
 main .theatre-tour {
@@ -77,9 +81,6 @@ main .theatre-tour {
  margin:0 auto;
  z-index:50;
  padding-inline:16px;
- background:var(--player-surface);
- box-shadow:var(--player-shadow);
- backdrop-filter:blur(8px);
 }
 main:not([data-view-mode='stage']) .theatre-tour { display:none; }
 main[data-score-mode='light'] :is(.floating-player-dock,.theatre-tour),
@@ -87,11 +88,11 @@ main[data-theme='light'] :is(.floating-player-dock,.theatre-tour),
 [data-theme='light'] main :is(.floating-player-dock,.theatre-tour) { --touch-halo:rgba(28,25,23,.08); }
 main :is(.floating-player-dock,.theatre-tour)[data-interacting='pressed'] {
  transform:translate3d(0,0,0) scale(1.012);
- border-color:color-mix(in srgb,var(--player-ink) 28%,transparent);
+ --dock-edge:color-mix(in srgb,var(--player-ink) 28%,transparent);
 }
 main :is(.floating-player-dock,.theatre-tour)[data-interacting='scrubbing'] {
  transform:translate3d(var(--player-drag-x),0,0) scale(1.014);
- border-color:color-mix(in srgb,var(--player-ink) 32%,transparent);
+ --dock-edge:color-mix(in srgb,var(--player-ink) 32%,transparent);
  transition-timing-function:cubic-bezier(.22,1,.36,1);
  transition-duration:.15s;
 }
@@ -138,7 +139,6 @@ main .player-control-icon {
 }
 main .player-skip-icon { width:18px; height:12px; fill:currentColor; opacity:.85; transition:opacity .15s ease; }
 main button:hover .player-skip-icon,main button:active .player-skip-icon { opacity:1; }
-@media(max-width:768px) { main .theatre-tour { padding-inline:8px; } }
 @media(prefers-reduced-motion:reduce) {
  main .floating-player-dock,main .theatre-tour,
  main .player .floating-player-dock .morphing-transport>button,main .theatre-tour button { transform:none !important; transition:none; }
@@ -215,11 +215,7 @@ main .theatre-tour .tour-stay { max-width:none; flex-shrink:0; white-space:nowra
   inset:auto 14px calc(14px + env(safe-area-inset-bottom,0px));
   width:calc(100% - 28px);
   z-index:100;
-  padding:0 12px;
- }
- main[data-view-mode='stage'][data-tour='true']::after {
-  height:calc(144px + env(safe-area-inset-bottom,0px));
-  background:linear-gradient(to bottom,transparent,var(--bg-primary) calc(100% - 55px - env(safe-area-inset-bottom,0px)),var(--bg-primary));
+  padding:0 16px;
  }
  .theatre-tour .tour-desktop-word { display:none; }
  .theatre-tour .tour-controls { gap:8px; }

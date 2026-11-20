@@ -1,4 +1,4 @@
-import {useState,type ReactNode} from 'react';
+import {useMemo,useState,type ReactNode} from 'react';
 import {ScoreToolbar} from './ScoreToolbar';
 import {ScoreViewport,type ScorePage} from './ScoreViewport';
 import {createWorkBoxLookup} from './workMeasureBoxes';
@@ -19,12 +19,20 @@ export function CurrentScorePages({vocal,data,measures,trackId,fingerprint,time,
  const number=selectedBar?.number||current?.measure.number||1;
  const barRange=workBarRange(measures,trackId,fingerprint,number);
  const spatial=matched&&!manual?workMeasureBox(measures,number):undefined;
+ const regionBoxes=useMemo(()=>region?measures.measures
+  .filter(measure=>measure.regionId===region.id)
+  .map(measure=>workMeasureBox(measures,measure.number)):[],[region,measures]);
  const sourcePages=region?(spatial&&!region.pages.some(p=>p.page===spatial.page)?[{page:spatial.page,url:`/assets/scores/work/page-${spatial.page}.webp`,box:[0,0,1,1]}]:region.pages):[];
  const scene:ScorePage[]=sourcePages.map(p=>{
   let [x,y,w,h]=p.box;
   const highlight=spatial?.page===p.page?spatial.box:undefined;
-  if(highlight){const [bx,by,bw,bh]=highlight;const right=Math.max(x+w,bx+bw+.012),bottom=Math.max(y+h,by+bh+.012);x=Math.max(0,Math.min(x,bx-.012));y=Math.max(0,Math.min(y,by-.012));w=Math.min(1,right)-x;h=Math.min(1,bottom)-y}
-  return {url:p.url,page:p.page,view:[x*911,y*1232,w*911,h*1232],box:highlight?[highlight[0]*911,highlight[1]*1232,highlight[2]*911,highlight[3]*1232]:undefined,label:`第 ${data.movement} 乐章 PDF 第 ${p.page} 页原谱`};
+  for(const entry of regionBoxes)if(entry?.page===p.page){
+   const [bx,by,bw,bh]=entry.box;
+   const right=Math.max(x+w,bx+bw+.012),bottom=Math.max(y+h,by+bh+.012);
+   x=Math.max(0,Math.min(x,bx-.012));y=Math.max(0,Math.min(y,by-.012));
+   w=Math.min(1,right)-x;h=Math.min(1,bottom)-y;
+  }
+  return {url:p.url,page:p.page,view:[x*911,y*1232,w*911,h*1232],row:highlight?spatial?.system:undefined,box:highlight?[highlight[0]*911,highlight[1]*1232,highlight[2]*911,highlight[3]*1232]:undefined,label:`第 ${data.movement} 乐章 PDF 第 ${p.page} 页原谱`};
  });
  const index=data.regions.findIndex(r=>r.id===region?.id);
  const local=region&&regionIntervals(data,region.id).find(i=>i.trackId===trackId&&i.fingerprint===fingerprint);

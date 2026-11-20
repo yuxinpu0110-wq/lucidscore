@@ -1,10 +1,13 @@
 import {bandEnergy,computeMovement5DawnProgress,damp} from './dawnProgress';
 export type VisualState={movement:number;playing:boolean;bar:number|null};
 
-/** A single unity-gain media graph. Visual analysis never controls playback. */
+/** One media graph for seek and tour fades, with a tap for visual analysis. */
 export class AudioReactiveEngine {
  private ctx:AudioContext|null=null;
  private gain:GainNode|null=null;
+ private tourGain:GainNode|null=null;
+ private tourLevel=1;
+ private fallbackTourVolume:number|null=null;
  private analyser:AnalyserNode|null=null;
  private sourceMap=new WeakMap<HTMLMediaElement,MediaElementAudioSourceNode>();
  private connecting:Promise<void>|null=null;
@@ -42,7 +45,17 @@ export class AudioReactiveEngine {
    if(this.disposed||ctx.state!=='running')return;
    if(!this.analyser){this.analyser=ctx.createAnalyser();this.analyser.fftSize=2048;this.analyser.smoothingTimeConstant=.85;this.data=new Uint8Array(this.analyser.frequencyBinCount);this.analyser.connect(ctx.destination)}
    source=this.sourceMap.get(audio);
-   if(!source){source=ctx.createMediaElementSource(audio);this.sourceMap.set(audio,source);source.connect(this.gain||(this.gain=this.ctx!.createGain()));this.gain!.connect(this.analyser)}
+   if(!source){
+    this.gain=ctx.createGain();
+    this.tourGain=ctx.createGain();
+    this.tourGain.gain.value=this.tourLevel;
+    source=ctx.createMediaElementSource(audio);
+    this.sourceMap.set(audio,source);
+    source.connect(this.gain);
+    this.gain.connect(this.tourGain);
+    this.tourGain.connect(this.analyser);
+    if(this.fallbackTourVolume!==null){audio.volume=this.fallbackTourVolume;this.fallbackTourVolume=null}
+   }
    this.status='analysed';
   }catch{
    // If graph setup fails after capture, preserve a direct unity-gain route.
@@ -51,8 +64,20 @@ export class AudioReactiveEngine {
   }
   this.wake();
  }
- hasGain(){return !!this.gain}
- fadeTo(value:number,seconds:number){if(!this.gain||!this.ctx)return;const gain=this.gain.gain,now=this.ctx.currentTime;gain.cancelAndHoldAtTime(now);gain.linearRampToValueAtTime(value,now+seconds)}
+ fadeTo(value:number,seconds:number){this.ramp(this.gain,value,seconds)}
+ setTourGain(audio:HTMLMediaElement,value:number,baseVolume:number){
+  this.tourLevel=value;
+  if(this.status==='analysed'){this.ramp(this.tourGain,value,value===0?0:.05);return}
+  this.fallbackTourVolume=value===1?null:baseVolume;
+  audio.volume=value*baseVolume;
+ }
+ private ramp(node:GainNode|null,value:number,seconds:number){
+  if(!node||!this.ctx)return;
+  const gain=node.gain,now=this.ctx.currentTime;
+  gain.cancelAndHoldAtTime(now);
+  if(seconds===0)gain.setValueAtTime(value,now);
+  else gain.linearRampToValueAtTime(value,now+seconds);
+ }
  private write(name:string,value:number){if(name.startsWith('--audio-')&&value!==0&&Math.abs(value-Number(this.written.get(name)??'-1'))<.005)return;const next=value.toFixed(4);if(this.written.get(name)!==next){document.documentElement.style.setProperty(name,next);this.written.set(name,next)}}
  private wake=()=>{if(!this.disposed&&!this.raf)this.raf=requestAnimationFrame(this.tick)};
  private tick=(now:number)=>{

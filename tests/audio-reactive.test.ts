@@ -2,6 +2,7 @@ import {afterEach,describe,it,expect,vi} from 'vitest';
 import {AudioReactiveEngine,type VisualState} from '../src/AudioReactiveEngine';
 function environment(options:{unsupported?:boolean;resumeFails?:boolean}={}){
  const values=new Map<string,string>(),callbacks=new Map<number,FrameRequestCallback>(),mediaListeners=new Set<()=>void>();let id=0,time=0,level=0,creates=0,sourceLinks=0,destinationLinks=0;
+ const gains:{value:number}[]=[];
  const root={style:{setProperty:(k:string,v:string)=>values.set(k,v),removeProperty:(k:string)=>values.delete(k),colorScheme:''},dataset:{} as Record<string,string>};
  const main={dataset:{} as Record<string,string>},body={dataset:{} as Record<string,string>};
  const media={matches:false,addEventListener:(_e:string,f:()=>void)=>mediaListeners.add(f),removeEventListener:(_e:string,f:()=>void)=>mediaListeners.delete(f)};
@@ -12,12 +13,16 @@ function environment(options:{unsupported?:boolean;resumeFails?:boolean}={}){
   createAnalyser(){return {fftSize:0,smoothingTimeConstant:0,frequencyBinCount:1024,connect:()=>destinationLinks++,getByteFrequencyData:(a:Uint8Array)=>a.fill(level)}}
   createMediaElementSource(){creates++;return {connect:()=>sourceLinks++,disconnect:()=>{}}}
   currentTime=0;
-  createGain(){return {gain:{cancelAndHoldAtTime:()=>{},linearRampToValueAtTime:()=>{}},connect:()=>{}}}
+  createGain(){
+   const gain={value:1,cancelAndHoldAtTime(){},linearRampToValueAtTime(value:number){this.value=value},setValueAtTime(value:number){this.value=value}};
+   gains.push(gain);
+   return {gain,connect:()=>{}};
+  }
  }
  vi.stubGlobal('window',options.unsupported?{}:{AudioContext:FakeContext});
  vi.stubGlobal('document',{documentElement:root,body,getElementById:()=>main,addEventListener:()=>{},removeEventListener:()=>{}});
  vi.stubGlobal('matchMedia',()=>media);vi.stubGlobal('requestAnimationFrame',(cb:FrameRequestCallback)=>{callbacks.set(++id,cb);return id});vi.stubGlobal('cancelAnimationFrame',(n:number)=>callbacks.delete(n));
- return {values,root,media,counts:()=>({creates,sourceLinks,destinationLinks}),level:(n:number)=>{level=n},reduce:()=>{media.matches=true;for(const f of mediaListeners)f()},step:(frames=1)=>{for(let i=0;i<frames;i++){time+=1000/60;const todo=[...callbacks.values()];callbacks.clear();todo.forEach(cb=>cb(time))}},pending:()=>callbacks.size};
+ return {values,root,media,gains,counts:()=>({creates,sourceLinks,destinationLinks}),level:(n:number)=>{level=n},reduce:()=>{media.matches=true;for(const f of mediaListeners)f()},step:(frames=1)=>{for(let i=0;i<frames;i++){time+=1000/60;const todo=[...callbacks.values()];callbacks.clear();todo.forEach(cb=>cb(time))}},pending:()=>callbacks.size};
 }
 afterEach(()=>vi.unstubAllGlobals());
 describe('audio-reactive lifecycle',()=>{
@@ -26,6 +31,18 @@ describe('audio-reactive lifecycle',()=>{
   engine.update(()=>({movement:5,playing:false,bar:472}));e.step();expect(e.counts().creates).toBe(0);
   await engine.connectAudio(audio);await engine.connectAudio(audio);await engine.connectAudio(audio);
   expect(e.counts()).toEqual({creates:1,sourceLinks:1,destinationLinks:1});engine.dispose();expect(e.pending()).toBe(0);
+ });
+ it('holds the tour level when seek gain resets and restores the original media volume on connect',async()=>{
+  const e=environment(),engine=new AudioReactiveEngine(),audio={volume:.8} as HTMLMediaElement;
+  engine.setTourGain(audio,0,.8);
+  expect(audio.volume).toBe(0);
+  await engine.connectAudio(audio);
+  expect(audio.volume).toBe(.8);
+  engine.fadeTo(1,.06);
+  expect(e.gains.map(gain=>gain.value)).toEqual([1,0]);
+  engine.setTourGain(audio,.35,.8);
+  expect(e.gains.map(gain=>gain.value)).toEqual([1,.35]);
+  engine.dispose();
  });
  it('measures real bands, releases on pause, and stops idle animation',async()=>{
   const e=environment(),engine=new AudioReactiveEngine();let playing=true;e.level(255);

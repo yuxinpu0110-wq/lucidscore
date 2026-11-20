@@ -89,7 +89,7 @@ const initialQuery=readListeningQuery(location.search,guideCounts);
 const tourEnabled=true;
 const initialTour=tourEnabled&&new URLSearchParams(location.search).get('tour')==='highlights';
 function App() {
-    const [introOpen,IntroOpen]=useState(()=>!initialTour&&!hasSeenPrologue());
+    const [introOpen,IntroOpen]=useState(()=>!initialTour&&!initialQuery.hasSelection&&!hasSeenPrologue());
     const pendingFullPlay=useRef(false);
     const prologuePlay=useRef<()=>void>(()=>{});
     const [mobileLayout,SetMobileLayout]=useState(()=>matchMedia('(max-width:768px)').matches);
@@ -202,7 +202,8 @@ function App() {
         Err('');
         audio.current!.load();
         return;
-    } act(keepPanel ? 'audition' : 'play'); try {
+    } if(!keepPanel){BarBrowse(null);PageBrowse(null)}
+    act(keepPanel ? 'audition' : 'play'); try {
         void reactive.current?.connectAudio(audio.current!);
         await audio.current!.play();
         if (g === generation.current)
@@ -351,7 +352,7 @@ function App() {
     const displayedBar = barBrowse || currentBar || guides.guides[0]?.from || null;
     const tour=useCuratedTour({enabled:tourEnabled,audio,movement,source:url,ready:canSeekGuides,
         select:stop=>{pendingLink.current=null;pause();B(previous=>{const next={...previous};delete next[stop.movementId];return next});setKind('real');SelectTrack('');S('');L(false);Stack([]);C(false);M(stop.movementId);Mode('启发探索');BarBrowse(null);PageBrowse(null);enterStage();IntroOpen(false)},
-        gain:(value,base)=>{if(reactive.current?.hasGain()){if(audio.current)audio.current.volume=base;reactive.current.fadeTo(value,.05)}else if(audio.current)audio.current.volume=value*base},
+        gain:(value,base)=>{if(audio.current)reactive.current?.setTourGain(audio.current,value,base)},
         playing:()=>{void reactive.current?.connectAudio(audio.current!);act('play')},paused:()=>act('ended')});
     function listenToFullMovement(){
         const root=document.documentElement;

@@ -1,8 +1,9 @@
 import {memo,useEffect,useId,useLayoutEffect,useRef,useState} from 'react';
 import {MeasureLiquidLens} from './MeasureLiquidLens';
+import {useScoreScroll} from './useScoreScroll';
 
 type Box=[number,number,number,number];
-export type ScorePage={url:string;page:number;view:Box;box?:Box;label:string};
+export type ScorePage={url:string;page:number;view:Box;box?:Box;label:string;row?:number};
 type Scene={key:string;pages:ScorePage[]};
 const decoded=new Map<string,Promise<void>>();
 function prepare(url:string){
@@ -31,20 +32,9 @@ function useGeometry(view:Box,svg:React.RefObject<SVGSVGElement|null>){
 function Pane({page,outgoing}:{page:ScorePage;outgoing?:boolean}){
  const [mobile,Mobile]=useState(()=>matchMedia('(max-width:768px)').matches);
  useEffect(()=>{const query=matchMedia('(max-width:768px)'),change=()=>Mobile(query.matches);query.addEventListener('change',change);return()=>query.removeEventListener('change',change)},[]);
- const view:Box=mobile&&page.box?[page.view[0],Math.max(0,page.box[1]-16),page.view[2],Math.min(1232,page.box[1]+page.box[3]+16)-Math.max(0,page.box[1]-16)]:page.view;
+ const view:Box=mobile?[0,0,911,1232]:page.view;
  const svg=useRef<SVGSVGElement>(null),v=useGeometry(view,svg),inkFilter=useId();
- const lastTouch=useRef(Number.NEGATIVE_INFINITY);
- useEffect(()=>{
-  const source=svg.current,viewport=source?.closest('.score-follow-pages') as HTMLElement|null;
-  if(!mobile||!source||!viewport||!page.box||outgoing)return;
-  const touch=()=>{lastTouch.current=performance.now()};
-  const follow=()=>{if(performance.now()-lastTouch.current<1200)return;const matrix=source.getScreenCTM();if(!matrix)return;
-   const [x,y,w,h]=page.box!,center=new DOMPoint(x+w/2,y+h/2).matrixTransform(matrix),rect=viewport.getBoundingClientRect();
-   viewport.scrollTo({left:Math.max(0,viewport.scrollLeft+center.x-rect.left-viewport.clientWidth/2),top:Math.max(0,viewport.scrollTop+center.y-rect.top-viewport.clientHeight/2),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
-  };
-  const timer=setTimeout(follow,350),observer=new ResizeObserver(follow);observer.observe(viewport);viewport.addEventListener('pointerdown',touch,{passive:true});
-  return()=>{clearTimeout(timer);observer.disconnect();viewport.removeEventListener('pointerdown',touch)};
- },[mobile,page.box?.join(','),page.url,outgoing]);
+ useScoreScroll(svg,page.box,page.row,mobile&&!outgoing);
  return <div className="score-follow-page" data-highlighted={!!page.box}><svg ref={svg} className="score-ink score-transition-ink" viewBox={v.join(' ')} data-camera-moving={v.some((n,i)=>Math.abs(n-view[i])>.001)} style={{aspectRatio:`${v[2]}/${v[3]}`}} role={outgoing?undefined:'img'} aria-label={outgoing?undefined:page.label} preserveAspectRatio="xMidYMin meet">
   <defs><filter id={inkFilter} colorInterpolationFilters="sRGB">
    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.333333 -.333333 -.333334 0 1" result="scan-ink"/>

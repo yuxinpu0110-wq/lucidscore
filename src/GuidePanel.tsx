@@ -36,7 +36,6 @@ export function GuidePanel({data,research,bar,layer,canSeek,isRangeMapped,showPr
  const stableReference=useCallback((from:number,to?:number,movement?:number)=>reference.current(from,to,movement),[]);
  const guide=bar?guideAt(data,research,bar):undefined;
  if(!guide)return <section className="guide-panel"><div className="guide-header-bar"><span className="urtext-label">KOMMENTAR · 导读</span></div><p className="muted">{bar?`第 ${bar} 小节暂无导读；谱面仍可浏览和回听。`:'此处暂无可对应的导读；可用小节号浏览。'}</p>{promptOnly&&listeningCue}</section>;
- const source=data.movement===3?research.notes.find(n=>n.id===guide.researchId):undefined;
  const index=data.guides.findIndex(g=>g.id===guide.id);
  const label=movementLabels[data.movement-1]+'乐章';
  const advancedLayer=tourActive&&layer==='赏析'?'结构':layer;
@@ -55,7 +54,6 @@ export function GuidePanel({data,research,bar,layer,canSeek,isRangeMapped,showPr
   <GuideText text={body||`这一段暂无${layer}解读。`} onReference={stableReference}/>
   {showPrompt&&!canSeek&&<details className="guide-reading-prompt"><summary>这一段的聆听提示</summary><p>{guide.prompt}</p></details>}
   <details className="guide-index"><summary>浏览{label}的 {data.guides.length} 段导读{canSeek?' · 点击后定位并暂停':''}</summary><div>{data.guides.map(g=><button key={g.id} aria-current={g.id===guide.id?'true':undefined} onClick={()=>onBrowse(g.from)}><span>{g.from}—{g.to}</span>{g.title}</button>)}</div></details>
-  <details className="guide-source"><summary>解读依据</summary><p><strong>导听阐释</strong> · 作者对当前乐段的听觉与结构解读。</p>{source&&<><p><strong>文献参考</strong> · 以下资料提供相关背景。</p><p><a href={source.sourceUrl} target="_blank" rel="noreferrer">{source.sourceTitle}</a> · {source.sourceLocation}</p>{source.supportingSources?.map(s=><p key={s.url}><a href={s.url} target="_blank" rel="noreferrer">{s.title}</a> · {s.location}</p>)}</>}</details>
   </div>
  </section>
 }

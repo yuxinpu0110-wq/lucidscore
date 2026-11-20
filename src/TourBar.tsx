@@ -36,7 +36,11 @@ export function TourBar({tour,audio,playing,onToggle,onDrag,onSeek,onDrop,onList
  const seekTour=(time:number)=>{
   const segment=segmentAt(time);
   const offset=Math.max(0,Math.min(segment.stop.clipEnd-segment.stop.clipStart-.05,time-segment.start));
-  if(segment.stop.step===tour.step)onSeek(segment.stop.clipStart+offset);
+  if(segment.stop.step===tour.step){
+   const target=segment.stop.clipStart+offset;
+   tour.manualSeek(target);
+   onSeek(target);
+  }
   else nextStop.current={step:segment.stop.step,offset};
  };
  const drop=()=>{

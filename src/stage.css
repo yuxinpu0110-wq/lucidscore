@@ -83,10 +83,11 @@ nav.compact-movement-pills button[aria-pressed='true'] { background: var(--accen
 .score-info-panel select { display: block; width: 100%; max-width: 100%; margin-top: 8px; }
 .current-score .score-follow-pages { height: clamp(320px,calc(100svh - 260px),640px); margin-top: 0; overflow: hidden; }
 .current-score .score-follow-pages[data-zoom='true'] { height: auto; overflow: visible; }
+.measure-liquid-lens { backdrop-filter: brightness(1.45) contrast(1.15); -webkit-backdrop-filter: brightness(1.45) contrast(1.15); }
 .current-score svg.score-ink { margin: 0; max-height: none; }
 .score-follow-page::after { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg,color-mix(in srgb,var(--bg-canvas) 24%,transparent),transparent 18%,transparent 82%,color-mix(in srgb,var(--bg-canvas) 24%,transparent)); }
 .current-score .score-transition-ink .score-raster-transparent { opacity: .62; }
-.measure-liquid-lens { backdrop-filter: brightness(1.45) contrast(1.15); -webkit-backdrop-filter: brightness(1.45) contrast(1.15); }
+
 .guide-header-bar { display: flex; align-items: center; justify-content: space-between; gap: 6px; height: 40px; margin-bottom: 16px; border-bottom: 1px solid var(--glass-rim-border); }
 .guide-header-bar>div:first-child { min-width: 0; }
 .guide-header-bar .measure-range-link { display: inline-flex; align-items: center; min-height: 32px; margin: 0; padding: 4px 7px; font: 10px/1.4 var(--font-number); white-space: nowrap; border: 0; background: transparent; box-shadow: none; color: var(--accent-primary); }
